@@ -30,13 +30,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todoapp.R
+import com.example.todoapp.utils.fontsfamilys
 
-val poppinsFamily = FontFamily(
-  Font(R.font.poppinsblack, FontWeight.Black),
-  Font(R.font.poppinsbold, FontWeight.Bold),
-  Font(R.font.poppinsextrabold, FontWeight.ExtraBold),
-  Font(R.font.poppinsregular, FontWeight.Normal),
-)
 
 @Composable
 fun SplashScreen() {
@@ -59,30 +54,31 @@ fun SplashScreen() {
       text = "Get things done with TODO",
       style = TextStyle(
         fontSize = 22.sp,
-        fontFamily = poppinsFamily,
+        fontFamily = fontsfamilys.poppinsFamily,
         fontWeight = FontWeight(700),
         color = Color(0xE5000000),
         textAlign = TextAlign.Center,
       )
     )
-    Box(modifier = Modifier.fillMaxSize()){
-    Button(modifier = Modifier
-      .padding(bottom = 10.dp, start = 20.dp, end = 20.dp)
-      .fillMaxWidth()
-      .align(Alignment.BottomCenter),
-      colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.buttonColor)),
-      shape = RoundedCornerShape(5.dp),
-      onClick = { /*TODO*/ }) {
-      Text(
-        text = "Get Started",
-        style = TextStyle(
-          fontSize = 20.sp,
-          fontFamily = poppinsFamily,
-          fontWeight = FontWeight.Bold,
-          color = Color(0xE5000000),
-          textAlign = TextAlign.Center,
+    Box(modifier = Modifier.fillMaxSize()) {
+      Button(modifier = Modifier
+        .padding(bottom = 10.dp, start = 20.dp, end = 20.dp)
+        .fillMaxWidth()
+        .align(Alignment.BottomCenter),
+        colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.buttonColor)),
+        shape = RoundedCornerShape(5.dp),
+        onClick = { /*TODO*/ }) {
+        Text(
+          text = "Get Started",
+          style = TextStyle(
+            fontSize = 20.sp,
+            fontFamily = fontsfamilys.poppinsFamily,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xE5000000),
+            textAlign = TextAlign.Center,
+          )
         )
-      )}
+      }
     }
 
 
