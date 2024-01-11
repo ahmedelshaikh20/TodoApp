@@ -45,7 +45,7 @@ fun SignUpScreen() {
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
 
-    headline()
+    headline("Welcome Onboard!", "Lets help you in completing your tasks")
     Box(
       modifier = Modifier
         .fillMaxWidth(), contentAlignment = Alignment.Center
@@ -77,7 +77,12 @@ fun SignUpScreen() {
       }
     }
 
-    registerButton(modifier = Modifier.padding(bottom = 10.dp))
+    composeButton(
+      "Register",
+      "\"Already have an account ? \"",
+      "Sign in",
+      modifier = Modifier.padding(bottom = 10.dp)
+    )
 
 
   }
@@ -121,7 +126,7 @@ fun combinedTextField(label: String, placeholder: String, modifier: Modifier = M
 }
 
 @Composable
-fun headline(modifier: Modifier = Modifier) {
+fun headline(title: String, par: String? = null, modifier: Modifier = Modifier) {
   Column(
     modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.spacedBy(5.dp)
@@ -129,7 +134,7 @@ fun headline(modifier: Modifier = Modifier) {
 
 
     Text(
-      text = "Welcome Onboard!",
+      text = title,
       style = TextStyle(
         fontSize = 22.sp,
         fontFamily = fontsfamilys.poppinsFamily,
@@ -139,21 +144,28 @@ fun headline(modifier: Modifier = Modifier) {
         textAlign = TextAlign.Center,
       )
     )
-    Text(
-      text = "Lets help you in completing your tasks",
-      style = TextStyle(
-        fontSize = 15.sp,
-        fontFamily = fontsfamilys.poppinsFamily,
-        fontWeight = FontWeight(200),
-        color = Color(0xE5000000),
-        textAlign = TextAlign.Center,
+    if (par != null) {
+      Text(
+        text = par,
+        style = TextStyle(
+          fontSize = 15.sp,
+          fontFamily = fontsfamilys.poppinsFamily,
+          fontWeight = FontWeight(200),
+          color = Color(0xE5000000),
+          textAlign = TextAlign.Center,
+        )
       )
-    )
+    }
   }
 }
 
 @Composable
-fun registerButton(modifier: Modifier = Modifier) {
+fun composeButton(
+  textButton: String,
+  instructionText: String,
+  navText: String,
+  modifier: Modifier = Modifier
+) {
   Column(
     modifier = modifier
       .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
@@ -165,7 +177,7 @@ fun registerButton(modifier: Modifier = Modifier) {
       shape = RoundedCornerShape(5.dp),
       onClick = { /*TODO*/ }) {
       Text(
-        text = "Register",
+        text = textButton,
         style = TextStyle(
           fontSize = 15.sp,
           fontFamily = fontsfamilys.poppinsFamily,
@@ -177,7 +189,7 @@ fun registerButton(modifier: Modifier = Modifier) {
     }
     Text(
       text = buildAnnotatedString {
-        append("Already have an account ? ")
+        append(instructionText)
         pushStyle(
           SpanStyle(
             fontSize = 12.sp,
@@ -185,7 +197,7 @@ fun registerButton(modifier: Modifier = Modifier) {
             color = colorResource(id = R.color.buttonColor)
           )
         )
-        append("Sign in")
+        append(navText)
       },
       style = TextStyle(
         fontSize = 12.sp,
