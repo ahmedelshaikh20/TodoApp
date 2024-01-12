@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todoapp.R
+import com.example.todoapp.staticImage
 import com.example.todoapp.utils.fontsfamilys
 
 
@@ -33,6 +34,7 @@ fun SignInScreen() {
     verticalArrangement = Arrangement.spacedBy(50.dp),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
+    staticImage()
     headlineWithImage()
     signinSection(Modifier.padding(horizontal = 15.dp))
     composeButton(

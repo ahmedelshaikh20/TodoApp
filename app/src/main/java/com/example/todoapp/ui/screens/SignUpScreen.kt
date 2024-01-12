@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todoapp.R
+import com.example.todoapp.staticImage
 import com.example.todoapp.utils.fontsfamilys
 
 
@@ -44,7 +45,7 @@ fun SignUpScreen() {
     verticalArrangement = Arrangement.spacedBy(50.dp),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-
+    staticImage()
     headline("Welcome Onboard!", "Lets help you in completing your tasks")
     Box(
       modifier = Modifier
@@ -81,7 +82,7 @@ fun SignUpScreen() {
       "Register",
       "\"Already have an account ? \"",
       "Sign in",
-      modifier = Modifier.padding(bottom = 10.dp)
+      modifier = Modifier.padding(bottom = 10.dp).fillMaxWidth()
     )
 
 
@@ -96,7 +97,7 @@ fun combinedTextField(label: String, placeholder: String, modifier: Modifier = M
   OutlinedTextField(
     value = text,
     modifier = modifier.fillMaxWidth(),
-    shape = RoundedCornerShape(20.dp),
+    shape = RoundedCornerShape(10.dp),
     onValueChange = {
       text = it
     },
@@ -162,18 +163,15 @@ fun headline(title: String, par: String? = null, modifier: Modifier = Modifier) 
 @Composable
 fun composeButton(
   textButton: String,
-  instructionText: String,
-  navText: String,
+  instructionText: String?=null,
+  navText: String?=null,
   modifier: Modifier = Modifier
 ) {
   Column(
-    modifier = modifier
-      .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
+    modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally
   ) {
     Button(modifier = Modifier
-      .padding(start = 20.dp, end = 20.dp)
-      .fillMaxWidth(),
-      colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.buttonColor)),
+,      colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.buttonColor)),
       shape = RoundedCornerShape(5.dp),
       onClick = { /*TODO*/ }) {
       Text(
@@ -187,6 +185,7 @@ fun composeButton(
         )
       )
     }
+    if (instructionText!=null){
     Text(
       text = buildAnnotatedString {
         append(instructionText)
@@ -207,5 +206,5 @@ fun composeButton(
 
         )
     )
-  }
+  }}
 }

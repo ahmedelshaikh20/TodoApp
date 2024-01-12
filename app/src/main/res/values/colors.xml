@@ -10,6 +10,7 @@
   <color name="buttonColor">#62D2C3</color>
   <color name="placeholderColor">#80000000</color>
   <color name="labelColor">#FF000000</color>
+  <color name="backgroundColor"> #FFEEEEEE</color>
 
   0xFF000000
 </resources>

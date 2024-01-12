@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todoapp.R
+import com.example.todoapp.staticImage
 import com.example.todoapp.utils.fontsfamilys
 
 
@@ -42,7 +43,7 @@ fun SplashScreen() {
       .padding(top = 100.dp),
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
-
+    staticImage()
     Image(
       painter = painterResource(id = R.drawable.splash_background),
       contentDescription = "Background Image",
