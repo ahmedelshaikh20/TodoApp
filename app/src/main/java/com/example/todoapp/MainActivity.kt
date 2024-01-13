@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
@@ -22,9 +24,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.todoapp.navigation.Navigation
+import com.example.todoapp.ui.screens.HomeScreen
 import com.example.todoapp.ui.screens.SignInScreen
 import com.example.todoapp.ui.screens.SignUpScreen
 import com.example.todoapp.ui.screens.SplashScreen
@@ -41,26 +47,36 @@ class MainActivity : ComponentActivity() {
           verticalArrangement = Arrangement.Center,
           horizontalAlignment = Alignment.CenterHorizontally
         ) {
-          Box(
-            modifier = Modifier.fillMaxWidth()
-          ) {
-            Image(
-              painter = painterResource(id = R.drawable.shape),
-              contentDescription = "Background Image",
-              Modifier
-                .size(150.dp)
-                .padding(bottom = 50.dp, end = 10.dp)
-                .align(Alignment.TopStart)
-            )
 
-          }
-          SignInScreen()
+
+          Navigation()
 
         }
       }
     }
   }
 }
+
+
+@Composable
+fun staticImage(modifier: Modifier = Modifier, background: Color = colorResource(id = R.color.backgroundColor)) {
+  Box(
+    modifier = modifier
+      .fillMaxWidth()
+      .background(color = background)
+  ) {
+    Image(
+      painter = painterResource(id = R.drawable.shape),
+      contentDescription = "Background Image",
+      Modifier
+        .width(100.dp)
+        .height(100.dp)
+        .align(Alignment.TopStart),
+      contentScale = ContentScale.FillBounds
+    )
+  }
+}
+
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {

@@ -1,6 +1,7 @@
 package com.example.todoapp.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,25 +21,31 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.todoapp.R
+import com.example.todoapp.navigation.Screen
+import com.example.todoapp.staticImage
 import com.example.todoapp.utils.fontsfamilys
 
 
 @Composable
-fun SignInScreen() {
+fun SignInScreen(navController: NavHostController) {
   Column(
     modifier = Modifier
       .fillMaxSize()
+      .background(colorResource(id = R.color.backgroundColor))
       .verticalScroll(rememberScrollState()),
     verticalArrangement = Arrangement.spacedBy(50.dp),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
+    staticImage()
     headlineWithImage()
     signinSection(Modifier.padding(horizontal = 15.dp))
     composeButton(
       textButton = "Login",
       instructionText = "Don’t have an account ? ",
-      navText = "Sign Up"
+      navText = "Sign Up",
+      onClick = {navController.navigate(Screen.SignUpScreen.route)}
     )
   }
 
@@ -75,7 +82,7 @@ fun signinSection(modifier: Modifier = Modifier) {
             fontSize = 15.sp,
             fontFamily = fontsfamilys.poppinsFamily,
             fontWeight = FontWeight(700),
-            color = colorResource(id = R.color.buttonColor),
+            color = colorResource(id = R.color.mainColor),
           ),
           modifier = Modifier.align(Alignment.CenterEnd)
         )
