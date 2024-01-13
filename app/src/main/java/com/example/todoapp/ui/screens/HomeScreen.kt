@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,7 +17,6 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxColors
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,18 +33,18 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.todoapp.R
 import com.example.todoapp.staticImage
 import com.example.todoapp.utils.fontsfamilys
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavHostController) {
 
   Column(
     modifier = Modifier
@@ -58,9 +56,9 @@ fun HomeScreen() {
     Column(
       modifier = Modifier
         .fillMaxWidth()
-        .background(colorResource(id = R.color.buttonColor))
+        .background(colorResource(id = R.color.mainColor))
     ) {
-      staticImage(background = colorResource(id = R.color.buttonColor))
+      staticImage(background = colorResource(id = R.color.mainColor))
       RoundedImage(painterResource(id = R.drawable.gayar), "Gayar", modifier = Modifier.padding())
     }
     middleImage(Modifier.size(100.dp))
@@ -130,8 +128,7 @@ fun notes() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
       ) {
-        composeButton(textButton = "Save", modifier = Modifier.padding(10.dp))
-        composeButton(textButton = "Cancel", modifier = Modifier.padding(10.dp))
+        composeButton(textButton = "Save", modifier = Modifier.padding(10.dp), onClick = {})
 
       }
 
@@ -197,7 +194,7 @@ fun RoundedImage(
   Column(
     modifier = modifier
       .fillMaxWidth()
-      .background(colorResource(id = R.color.buttonColor)),
+      .background(colorResource(id = R.color.mainColor)),
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.spacedBy(5.dp)
   ) {
@@ -251,7 +248,7 @@ fun CustomizedCheckBox(modifier: Modifier = Modifier) {
       checked = checkedState,
       onCheckedChange = { checkedState = it },
       modifier = modifier,
-      colors = CheckboxDefaults.colors(checkedColor = colorResource(id = R.color.buttonColor))
+      colors = CheckboxDefaults.colors(checkedColor = colorResource(id = R.color.mainColor))
     )
     Text(
       text = "Select Option",

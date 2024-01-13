@@ -1,5 +1,6 @@
 package com.example.todoapp.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -23,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -31,16 +34,19 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.todoapp.R
+import com.example.todoapp.navigation.Screen
 import com.example.todoapp.staticImage
 import com.example.todoapp.utils.fontsfamilys
 
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(navController: NavHostController) {
   Column(
     modifier = Modifier
       .fillMaxSize()
+      .background(colorResource(id = R.color.backgroundColor))
       .verticalScroll(rememberScrollState()),
     verticalArrangement = Arrangement.spacedBy(50.dp),
     horizontalAlignment = Alignment.CenterHorizontally
@@ -79,10 +85,13 @@ fun SignUpScreen() {
     }
 
     composeButton(
-      "Register",
-      "\"Already have an account ? \"",
-      "Sign in",
-      modifier = Modifier.padding(bottom = 10.dp).fillMaxWidth()
+      stringResource(R.string.register),
+      stringResource(R.string.already_have_an_account),
+      stringResource(R.string.sign_in),
+      modifier = Modifier
+        .padding(bottom = 10.dp)
+        .fillMaxWidth() ,
+      onClick = {navController.navigate(Screen.SigninScreen.route)}
     )
 
 
@@ -163,15 +172,16 @@ fun headline(title: String, par: String? = null, modifier: Modifier = Modifier) 
 @Composable
 fun composeButton(
   textButton: String,
-  instructionText: String?=null,
-  navText: String?=null,
+  instructionText: String? = null,
+  navText: String? = null,
+  onClick : () -> (Unit),
   modifier: Modifier = Modifier
 ) {
   Column(
     modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    Button(modifier = Modifier
-,      colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.buttonColor)),
+    Button(modifier = Modifier,
+      colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.mainColor)),
       shape = RoundedCornerShape(5.dp),
       onClick = { /*TODO*/ }) {
       Text(
@@ -185,26 +195,46 @@ fun composeButton(
         )
       )
     }
-    if (instructionText!=null){
-    Text(
-      text = buildAnnotatedString {
+    if (instructionText != null && navText != null) {
+      val annotatedText = buildAnnotatedString {
+        pushStyle(
+          SpanStyle(
+            fontSize = 12.sp,
+            fontFamily = fontsfamilys.poppinsFamily,
+            fontWeight = FontWeight(600),
+            color = Color(0xCC000000),
+            )
+        )
         append(instructionText)
+        pop()
+        pushStringAnnotation(
+          tag = navText,// provide tag which will then be provided when you click the text
+          annotation = navText
+        )
         pushStyle(
           SpanStyle(
             fontSize = 12.sp,
             fontWeight = FontWeight(600),
-            color = colorResource(id = R.color.buttonColor)
+            color = colorResource(id = R.color.mainColor)
           )
         )
-        append(navText)
-      },
-      style = TextStyle(
-        fontSize = 12.sp,
-        fontFamily = fontsfamilys.poppinsFamily,
-        fontWeight = FontWeight(600),
-        color = Color(0xCC000000),
 
-        )
-    )
-  }}
-}
+        append(navText)
+        pop()
+
+      }
+
+
+      ClickableText(text = annotatedText) { offset ->
+        annotatedText.getStringAnnotations(
+          tag = navText,// tag which you used in the buildAnnotatedString
+          start = offset,
+          end = offset
+        ).forEach(){ annotation ->
+          //do your stuff when it gets clicked
+          onClick()
+        }
+      }
+
+    }
+}}

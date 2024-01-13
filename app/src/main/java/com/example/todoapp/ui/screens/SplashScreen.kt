@@ -4,16 +4,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,24 +19,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.todoapp.R
+import com.example.todoapp.navigation.Screen
 import com.example.todoapp.staticImage
 import com.example.todoapp.utils.fontsfamilys
 
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(navController: NavHostController) {
 
   Column(
     Modifier
       .fillMaxSize()
-      .padding(top = 100.dp),
+      .background(colorResource(id = R.color.backgroundColor)),
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
     staticImage()
@@ -66,9 +62,9 @@ fun SplashScreen() {
         .padding(bottom = 10.dp, start = 20.dp, end = 20.dp)
         .fillMaxWidth()
         .align(Alignment.BottomCenter),
-        colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.buttonColor)),
+        colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.mainColor)),
         shape = RoundedCornerShape(5.dp),
-        onClick = { /*TODO*/ }) {
+        onClick = { navController.navigate(Screen.SignUpScreen.route) }) {
         Text(
           text = "Get Started",
           style = TextStyle(

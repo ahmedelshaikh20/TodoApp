@@ -29,6 +29,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.todoapp.navigation.Navigation
 import com.example.todoapp.ui.screens.HomeScreen
 import com.example.todoapp.ui.screens.SignInScreen
 import com.example.todoapp.ui.screens.SignUpScreen
@@ -48,7 +49,7 @@ class MainActivity : ComponentActivity() {
         ) {
 
 
-          HomeScreen()
+          Navigation()
 
         }
       }
@@ -58,7 +59,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun staticImage(modifier: Modifier = Modifier, background: Color = Color.White) {
+fun staticImage(modifier: Modifier = Modifier, background: Color = colorResource(id = R.color.backgroundColor)) {
   Box(
     modifier = modifier
       .fillMaxWidth()
