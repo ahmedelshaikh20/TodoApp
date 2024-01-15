@@ -35,7 +35,9 @@ import com.example.todoapp.ui.screens.SignInScreen
 import com.example.todoapp.ui.screens.SignUpScreen
 import com.example.todoapp.ui.screens.SplashScreen
 import com.example.todoapp.ui.theme.TodoAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

@@ -38,11 +38,14 @@ import androidx.navigation.NavHostController
 import com.example.todoapp.R
 import com.example.todoapp.navigation.Screen
 import com.example.todoapp.staticImage
+import com.example.todoapp.utils.SignUpEvent
+import com.example.todoapp.utils.SignUpUIEvent
 import com.example.todoapp.utils.fontsfamilys
+import com.example.todoapp.viewmodel.SignUpViewModel
 
 
 @Composable
-fun SignUpScreen(navController: NavHostController) {
+fun SignUpScreen(navController: NavHostController, signUpViewModel: SignUpViewModel) {
   Column(
     modifier = Modifier
       .fillMaxSize()
@@ -62,22 +65,36 @@ fun SignUpScreen(navController: NavHostController) {
         combinedTextField(
           label = "Full Name",
           placeholder = "Ahmed Salah",
-          modifier = Modifier.padding(horizontal = 20.dp)
-        )
+          modifier = Modifier.padding(horizontal = 20.dp),
+          SignUpEvent.FULL_NAME_CHANGED,
+          onValueChanged = {
+            signUpViewModel.signUpEventsTriggered(it)}        )
         combinedTextField(
           label = "Email",
           placeholder = "ahmed@gmail.com",
-          modifier = Modifier.padding(horizontal = 20.dp)
+          modifier = Modifier.padding(horizontal = 20.dp),
+          SignUpEvent.EMAIL_CHANGED,
+          onValueChanged = {
+            signUpViewModel.signUpEventsTriggered(it)}
         )
         combinedTextField(
           label = "Password",
           placeholder = "**************",
-          modifier = Modifier.padding(horizontal = 20.dp)
+          modifier = Modifier.padding(horizontal = 20.dp),
+          SignUpEvent.PASSWORD_CHANGED,
+          onValueChanged = {
+            signUpViewModel.signUpEventsTriggered(it)}
+
         )
         combinedTextField(
           label = "Confirm Password",
           placeholder = "**************",
-          modifier = Modifier.padding(horizontal = 20.dp)
+          modifier = Modifier.padding(horizontal = 20.dp),
+          SignUpEvent.PASSWORD_CONFIRMATION_CHANGED,
+          onValueChanged = {
+            signUpViewModel.signUpEventsTriggered(it)}
+
+
         )
 
 
@@ -90,8 +107,10 @@ fun SignUpScreen(navController: NavHostController) {
       stringResource(R.string.sign_in),
       modifier = Modifier
         .padding(bottom = 10.dp)
-        .fillMaxWidth() ,
-      onClick = {navController.navigate(Screen.SigninScreen.route)}
+        .fillMaxWidth(),
+      onClick = {
+        signUpViewModel.signUp()
+         }
     )
 
 
@@ -101,7 +120,13 @@ fun SignUpScreen(navController: NavHostController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun combinedTextField(label: String, placeholder: String, modifier: Modifier = Modifier) {
+fun combinedTextField(
+  label: String,
+  placeholder: String,
+  modifier: Modifier = Modifier,
+  signUpEvent: SignUpEvent,
+  onValueChanged : (SignUpUIEvent) -> (Unit)
+) {
   var text by remember { mutableStateOf(TextFieldValue("")) }
   OutlinedTextField(
     value = text,
@@ -109,6 +134,7 @@ fun combinedTextField(label: String, placeholder: String, modifier: Modifier = M
     shape = RoundedCornerShape(10.dp),
     onValueChange = {
       text = it
+      onValueChanged(SignUpUIEvent(signUpEvent , it.text))
     },
     label = {
       Text(
@@ -174,7 +200,7 @@ fun composeButton(
   textButton: String,
   instructionText: String? = null,
   navText: String? = null,
-  onClick : () -> (Unit),
+  onClick: () -> (Unit),
   modifier: Modifier = Modifier
 ) {
   Column(
@@ -183,7 +209,7 @@ fun composeButton(
     Button(modifier = Modifier,
       colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.mainColor)),
       shape = RoundedCornerShape(5.dp),
-      onClick = { /*TODO*/ }) {
+      onClick = { onClick()}) {
       Text(
         text = textButton,
         style = TextStyle(
@@ -203,7 +229,7 @@ fun composeButton(
             fontFamily = fontsfamilys.poppinsFamily,
             fontWeight = FontWeight(600),
             color = Color(0xCC000000),
-            )
+          )
         )
         append(instructionText)
         pop()
@@ -230,11 +256,12 @@ fun composeButton(
           tag = navText,// tag which you used in the buildAnnotatedString
           start = offset,
           end = offset
-        ).forEach(){ annotation ->
+        ).forEach() { annotation ->
           //do your stuff when it gets clicked
           onClick()
         }
       }
 
     }
-}}
+  }
+}
