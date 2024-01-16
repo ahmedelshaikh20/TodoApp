@@ -1,4 +1,9 @@
 package com.example.domain.usecases
 
-class GetCurrentUserUseCase {
+import com.example.domain.repositories.RemoteRepo
+import javax.inject.Inject
+
+class GetCurrentUserUseCase @Inject constructor(val remoteRepo: RemoteRepo) {
+operator fun invoke() = remoteRepo.getCurrentUserFromServer()
+
 }

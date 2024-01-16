@@ -1,4 +1,7 @@
 package com.example.domain.models
 
-class RegisterationModel {
-}
+data class RegistrationModel (
+  val fullName : String="",
+  val email:String="",
+  val password:String="",
+)

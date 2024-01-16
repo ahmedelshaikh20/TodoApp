@@ -44,10 +44,9 @@ class MainActivity : ComponentActivity() {
     setContent {
       TodoAppTheme {
         // A surface container using the 'background' color from the theme
-        Column(
+        Surface(
           modifier = Modifier.fillMaxSize(),
-          verticalArrangement = Arrangement.Center,
-          horizontalAlignment = Alignment.CenterHorizontally
+
         ) {
 
 
