@@ -25,6 +25,10 @@ import androidx.navigation.NavHostController
 import com.example.todoapp.R
 import com.example.todoapp.navigation.Screen
 import com.example.todoapp.staticImage
+import com.example.todoapp.ui.components.ButtonComponent
+import com.example.todoapp.ui.components.MyTextField
+import com.example.todoapp.ui.components.PasswordTextField
+import com.example.todoapp.ui.components.TextClickable
 import com.example.todoapp.utils.fontsfamilys
 
 
@@ -41,12 +45,12 @@ fun SignInScreen(navController: NavHostController) {
     staticImage()
     headlineWithImage()
     signinSection(Modifier.padding(horizontal = 15.dp))
-    composeButton(
-      textButton = "Login",
-      instructionText = "Don’t have an account ? ",
-      navText = "Sign Up",
-      onClick = {navController.navigate(Screen.SignUpScreen.route)}
-    )
+//    composeSignInButton(
+//      textButton = "Login",
+//      instructionText = "Don’t have an account ? ",
+//      navText = "Sign Up",
+//      onRegisterClick = {navController.navigate(Screen.SignUpScreen.route)}
+//    )
   }
 
 
@@ -72,9 +76,9 @@ fun headlineWithImage(modifier: Modifier = Modifier) {
 @Composable
 fun signinSection(modifier: Modifier = Modifier) {
   Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
-    combinedTextField(label = "Email", placeholder = "ahmed@gmail.com")
+    MyTextField(label = "Email", placeholder = "ahmed@gmail.com" , onValueChanged = {})
     Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-      combinedTextField(label = "Password", placeholder = "**************")
+      PasswordTextField(label = "Password", placeholder = "**************" , onValueChanged = {})
       Box(modifier = Modifier.fillMaxWidth()) {
         Text(
           text = "Forgot Password?",
@@ -89,5 +93,27 @@ fun signinSection(modifier: Modifier = Modifier) {
       }
     }
 
+  }
+}
+
+@Composable
+fun composeSignInButton(
+  textButton: String,
+  instructionText: String? = null,
+  navText: String? = null,
+  onRegisterClick: () -> (Unit),
+  onSignInClicked: () -> (Unit),
+  modifier: Modifier = Modifier
+) {
+  Column(
+    modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally
+  ) {
+    ButtonComponent(value = textButton, onRegisterClick)
+    if (instructionText != null && navText != null) {
+      TextClickable(
+        instructionText = instructionText,
+        clickableText = navText,
+        onClick = { onSignInClicked })
+    }
   }
 }

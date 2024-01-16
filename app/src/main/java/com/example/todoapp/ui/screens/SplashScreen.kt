@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -27,6 +29,9 @@ import androidx.navigation.NavHostController
 import com.example.todoapp.R
 import com.example.todoapp.navigation.Screen
 import com.example.todoapp.staticImage
+import com.example.todoapp.ui.components.BoldTextField
+import com.example.todoapp.ui.components.NormalButton
+import com.example.todoapp.ui.components.NormalTextField
 import com.example.todoapp.utils.fontsfamilys
 
 
@@ -44,38 +49,17 @@ fun SplashScreen(navController: NavHostController) {
       painter = painterResource(id = R.drawable.splash_background),
       contentDescription = "Background Image",
       Modifier
-        .size(170.dp)
-    )
-    Text(
-      modifier = Modifier.padding(top = 20.dp),
-      text = "Get things done with TODO",
-      style = TextStyle(
-        fontSize = 22.sp,
-        fontFamily = fontsfamilys.poppinsFamily,
-        fontWeight = FontWeight(700),
-        color = Color(0xE5000000),
-        textAlign = TextAlign.Center,
-      )
-    )
-    Box(modifier = Modifier.fillMaxSize()) {
-      Button(modifier = Modifier
-        .padding(bottom = 10.dp, start = 20.dp, end = 20.dp)
         .fillMaxWidth()
-        .align(Alignment.BottomCenter),
-        colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.mainColor)),
-        shape = RoundedCornerShape(5.dp),
-        onClick = { navController.navigate(Screen.SignUpScreen.route) }) {
-        Text(
-          text = "Get Started",
-          style = TextStyle(
-            fontSize = 20.sp,
-            fontFamily = fontsfamilys.poppinsFamily,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xE5000000),
-            textAlign = TextAlign.Center,
-          )
-        )
-      }
+        .heightIn(min = 120.dp)
+    )
+    BoldTextField(value = "Get things done with TODO", modifier = Modifier.padding(20.dp))
+
+    Box(modifier = Modifier.fillMaxSize()) {
+      NormalButton(onClick = {
+        navController.navigate(Screen.SignUpScreen.route)
+      }, modifier = Modifier
+        .padding(15.dp)
+        .align(Alignment.BottomCenter))
     }
 
 

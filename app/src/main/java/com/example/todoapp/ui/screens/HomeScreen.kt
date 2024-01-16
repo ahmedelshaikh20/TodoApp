@@ -113,22 +113,22 @@ fun notes() {
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
     if (visible) {
-      combinedTextField(
-        label = "Title",
-        placeholder = "Note Title",
-        modifier = Modifier.padding(horizontal = 10.dp)
-      )
-      combinedTextField(
-        label = "Description",
-        placeholder = "Note Description",
-        modifier = Modifier.padding(horizontal = 10.dp)
-      )
+//      combinedTextField(
+//        label = "Title",
+//        placeholder = "Note Title",
+//        modifier = Modifier.padding(horizontal = 10.dp)
+//      )
+//      combinedTextField(
+//        label = "Description",
+//        placeholder = "Note Description",
+//        modifier = Modifier.padding(horizontal = 10.dp)
+//      )
 
       Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
       ) {
-        composeButton(textButton = "Save", modifier = Modifier.padding(10.dp), onClick = {})
+        // composeButton(textButton = "Save", modifier = Modifier.padding(10.dp), onRegisterClick = {})
 
       }
 
