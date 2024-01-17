@@ -20,6 +20,8 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,9 +44,11 @@ import androidx.navigation.NavHostController
 import com.example.todoapp.R
 import com.example.todoapp.staticImage
 import com.example.todoapp.utils.fontsfamilys
+import com.example.todoapp.viewmodel.HomeViewModel
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController, homeViewModel: HomeViewModel) {
+  val user = homeViewModel.currentUser.collectAsState()
 
   Column(
     modifier = Modifier
@@ -59,7 +63,7 @@ fun HomeScreen(navController: NavHostController) {
         .background(colorResource(id = R.color.mainColor))
     ) {
       staticImage(background = colorResource(id = R.color.mainColor))
-      RoundedImage(painterResource(id = R.drawable.gayar), "Gayar", modifier = Modifier.padding())
+      RoundedImage(painterResource(id = R.drawable.gayar), user.value?.fullName, modifier = Modifier.padding())
     }
     middleImage(Modifier.size(100.dp))
     notesSection()

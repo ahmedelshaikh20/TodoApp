@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -33,6 +35,12 @@ import com.example.todoapp.viewmodel.SignUpViewModel
 
 @Composable
 fun SignUpScreen(navController: NavHostController, signUpViewModel: SignUpViewModel) {
+  val isRegistrationDone = signUpViewModel.isRegistrationDone.collectAsState()
+  LaunchedEffect(key1 = isRegistrationDone.value ){
+    if (isRegistrationDone.value){
+      navController.navigate(Screen.HomeScreen.route)
+    }
+  }
   val scrollStateVertical = rememberScrollState()
   Column(
     modifier = Modifier
