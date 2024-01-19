@@ -2,6 +2,7 @@ package com.example.data.api.user
 
 import android.util.Log
 import com.example.domain.models.RegistrationModel
+import com.example.domain.models.SignInModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.userProfileChangeRequest
@@ -10,7 +11,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class UserApiClient @Inject constructor(val firebaseAuth: FirebaseAuth) {
+class UserApiClient @Inject constructor(private val firebaseAuth: FirebaseAuth) {
 
   suspend fun registerUser(registrationModel: RegistrationModel) =
     suspendCoroutine { continuation ->
@@ -28,6 +29,20 @@ class UserApiClient @Inject constructor(val firebaseAuth: FirebaseAuth) {
           continuation.resumeWithException(it)
         }
     }
+
+  suspend fun signInUser(signInModel: SignInModel) = suspendCoroutine { continuation->
+    firebaseAuth.signInWithEmailAndPassword(signInModel.email , signInModel.password)
+      .addOnCompleteListener {task->
+        if (task.isSuccessful) {
+          Log.d("SignIn", "currentUser Name : ${firebaseAuth.currentUser?.displayName}")
+          continuation.resume(Unit)
+        }
+      }
+      .addOnFailureListener {
+        continuation.resumeWithException(it)
+      }
+
+  }
 
 
   suspend fun updateUserName(fullName: String): Unit = suspendCoroutine {continuation->

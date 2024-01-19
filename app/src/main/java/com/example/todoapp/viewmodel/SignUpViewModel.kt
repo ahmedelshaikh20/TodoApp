@@ -18,37 +18,37 @@ class SignUpViewModel @Inject constructor(
 ) : ViewModel() {
 
   private val _userRegistrationInfo: MutableStateFlow<RegistrationModel> = MutableStateFlow(
-    RegistrationModel("","","")
+    RegistrationModel("", "", "")
   )
   val userRegistrationInfo = _userRegistrationInfo
 
 
-
   private val _isRegistrationDone: MutableStateFlow<Boolean> = MutableStateFlow(false)
-  val isRegistrationDone : StateFlow<Boolean> = _isRegistrationDone
-   fun signUp() {
-     viewModelScope.launch {
-       try {
-           validateRegistrationInfo()
-         Log.e("SignUp Error", _isRegistrationDone.value.toString())
-          signUpUseCase(userRegistrationInfo.value)
-         _isRegistrationDone.value=true
+  val isRegistrationDone: StateFlow<Boolean> = _isRegistrationDone
+  fun signUp() {
+    viewModelScope.launch {
+      try {
+        validateRegistrationInfo()
+        Log.e("SignUp Error", _isRegistrationDone.value.toString())
+        signUpUseCase(userRegistrationInfo.value)
+        _isRegistrationDone.value = true
 
-     }
-       catch (e: Exception) {
-         Log.e("SignUp Error", e.message.toString())}
+      } catch (e: Exception) {
+        Log.e("SignUp Error", e.message.toString())
+      }
 
-       }
+    }
   }
 
   private fun validateRegistrationInfo() {
-    if (userRegistrationInfo.value?.password == "" || userRegistrationInfo.value?.fullName == "" || userRegistrationInfo.value?.password == ""){
-    throw Exception("Some Fields are missing")}
+    if (userRegistrationInfo.value.password == "" || userRegistrationInfo.value.fullName == "" || userRegistrationInfo.value.password == "") {
+      throw Exception("Some Fields are missing")
+    }
   }
 
 
   fun signUpEventsTriggered(event: SignUpUIEvent) {
-    // This part i didnt do it myself i saw someone doing it
+
     when (event) {
 
       is SignUpUIEvent.FullNameChanged -> {

@@ -41,7 +41,7 @@ import com.example.todoapp.R
 import com.example.todoapp.utils.fontsfamilys
 
 @Composable
-fun NormalTextField(value: String, modifier: Modifier = Modifier) {
+fun BasicTextField(value: String, modifier: Modifier = Modifier) {
   Text(
     text = value,
     modifier = modifier
@@ -56,7 +56,7 @@ fun NormalTextField(value: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun BoldTextField(value: String, modifier: Modifier = Modifier) {
+fun BoldTextField(value: String,size : Int , modifier: Modifier = Modifier) {
   Text(
     text = value,
     modifier = modifier
@@ -64,6 +64,7 @@ fun BoldTextField(value: String, modifier: Modifier = Modifier) {
       .heightIn(),
     fontFamily = fontsfamilys.poppinsFamily,
     fontStyle = FontStyle.Normal,
+    fontSize = size.sp,
     fontWeight = FontWeight.Bold,
     color = colorResource(id = R.color.black),
     textAlign = TextAlign.Center
@@ -173,7 +174,7 @@ fun ButtonComponent(value: String, onClick: () -> (Unit) , modifier: Modifier=Mo
     colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.mainColor)),
     shape = RoundedCornerShape(5.dp),
     onClick = { onClick() }) {
-    BoldTextField(value = value)
+    BoldTextField(value = value , size = 22)
 
   }
 }
@@ -225,13 +226,13 @@ fun TextClickable(instructionText: String, clickableText: String, onClick: () ->
 
 
 @Composable
-fun NormalButton(onClick: () -> Unit, modifier: Modifier =Modifier){
+fun BasicButton(onClick: () -> Unit, modifier: Modifier =Modifier){
   Button(modifier = modifier
     .fillMaxWidth()
     .heightIn(min = 48.dp),
     colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.mainColor)),
     shape = RoundedCornerShape(5.dp),
     onClick = { onClick() }) {
-    BoldTextField(value = stringResource(R.string.get_started))
+    BoldTextField(value = stringResource(R.string.get_started), size = 22)
   }
 }
