@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todoapp.R
@@ -56,7 +57,7 @@ fun BasicTextField(value: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun BoldTextField(value: String,size : Int , modifier: Modifier = Modifier) {
+fun BoldTextField(value: String,size : TextUnit , modifier: Modifier = Modifier) {
   Text(
     text = value,
     modifier = modifier
@@ -64,7 +65,7 @@ fun BoldTextField(value: String,size : Int , modifier: Modifier = Modifier) {
       .heightIn(),
     fontFamily = fontsfamilys.poppinsFamily,
     fontStyle = FontStyle.Normal,
-    fontSize = size.sp,
+    fontSize = size,
     fontWeight = FontWeight.Bold,
     color = colorResource(id = R.color.black),
     textAlign = TextAlign.Center
@@ -174,7 +175,7 @@ fun ButtonComponent(value: String, onClick: () -> (Unit) , modifier: Modifier=Mo
     colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.mainColor)),
     shape = RoundedCornerShape(5.dp),
     onClick = { onClick() }) {
-    BoldTextField(value = value , size = 22)
+    BoldTextField(value = value , size = 22.sp)
 
   }
 }
@@ -233,6 +234,6 @@ fun BasicButton(onClick: () -> Unit, modifier: Modifier =Modifier){
     colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.mainColor)),
     shape = RoundedCornerShape(5.dp),
     onClick = { onClick() }) {
-    BoldTextField(value = stringResource(R.string.get_started), size = 22)
+    BoldTextField(value = stringResource(R.string.get_started), size = 22.sp)
   }
 }
