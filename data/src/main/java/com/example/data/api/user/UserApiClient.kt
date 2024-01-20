@@ -3,6 +3,7 @@ package com.example.data.api.user
 import android.util.Log
 import com.example.domain.models.RegistrationModel
 import com.example.domain.models.SignInModel
+import com.example.domain.models.UserInfoModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.userProfileChangeRequest
@@ -30,9 +31,9 @@ class UserApiClient @Inject constructor(private val firebaseAuth: FirebaseAuth) 
         }
     }
 
-  suspend fun signInUser(signInModel: SignInModel) = suspendCoroutine { continuation->
-    firebaseAuth.signInWithEmailAndPassword(signInModel.email , signInModel.password)
-      .addOnCompleteListener {task->
+  suspend fun signInUser(signInModel: SignInModel) = suspendCoroutine { continuation ->
+    firebaseAuth.signInWithEmailAndPassword(signInModel.email, signInModel.password)
+      .addOnCompleteListener { task ->
         if (task.isSuccessful) {
           Log.d("SignIn", "currentUser Name : ${firebaseAuth.currentUser?.displayName}")
           continuation.resume(Unit)
@@ -45,7 +46,7 @@ class UserApiClient @Inject constructor(private val firebaseAuth: FirebaseAuth) 
   }
 
 
-  suspend fun updateUserName(fullName: String): Unit = suspendCoroutine {continuation->
+  suspend fun updateUserName(fullName: String): Unit = suspendCoroutine { continuation ->
     try {
       val user = firebaseAuth.currentUser
       val profileUpdates = userProfileChangeRequest {
@@ -62,15 +63,19 @@ class UserApiClient @Inject constructor(private val firebaseAuth: FirebaseAuth) 
   }
 
 
-  suspend fun getCurrentUser(): FirebaseUser? = suspendCoroutine {
+  suspend fun getCurrentUser(): FirebaseUser? {
 
     try {
       val user = firebaseAuth.currentUser
-      it.resume(user)
-
+      return user
     } catch (e: Exception) {
-      it.resumeWithException(e)
 
+      throw Exception(e.message)
     }
   }
+}
+
+// mapping function from FirebaseUser to UserModel
+fun FirebaseUser.toUserInfoModel(): UserInfoModel {
+  return UserInfoModel(displayName,email)
 }
