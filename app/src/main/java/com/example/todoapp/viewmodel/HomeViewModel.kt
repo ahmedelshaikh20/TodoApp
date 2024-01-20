@@ -23,7 +23,7 @@ class HomeViewModel @Inject constructor(val getCurrentUserUseCase: GetCurrentUse
   fun getCurrentUser() {
     viewModelScope.launch {
       val currentUser = getCurrentUserUseCase()
-      _currentUser.value = UserInfoModel(currentUser.fullName, email = currentUser.email)
+      _currentUser.value = currentUser
     }
   }
 

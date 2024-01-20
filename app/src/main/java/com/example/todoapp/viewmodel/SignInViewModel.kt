@@ -27,17 +27,17 @@ class SignInViewModel @Inject constructor(val signInUseCase: SignInUseCase ,
   private val _userSuccessfullySignIn :MutableStateFlow<Boolean> = MutableStateFlow(false)
   val userSuccessfullySignIn =_userSuccessfullySignIn
 
-  private val _currentUser: MutableStateFlow<UserInfoModel> =
+  private val _currentUser: MutableStateFlow<UserInfoModel?> =
     MutableStateFlow(UserInfoModel("", ""))
-  val currentUser : StateFlow<UserInfoModel> = _currentUser
+  val currentUser : StateFlow<UserInfoModel?> = _currentUser
 
   fun loginUser() {
     viewModelScope.launch {
       try {
         signInUseCase(userSignInInfo.value)
         val user = getCurrentUserUseCase()
-        _currentUser.value = UserInfoModel(user.fullName, email = user.email)
-        Log.e("SignInError", currentUser.value.fullName.toString())
+        _currentUser.value = user
+        Log.e("SignInError", currentUser.value?.fullName.toString())
 
         _userSuccessfullySignIn.value = true
       } catch (e: Exception) {

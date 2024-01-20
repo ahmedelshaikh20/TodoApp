@@ -24,12 +24,14 @@ class SplashViewModel @Inject constructor(val getCurrentUserUseCase: GetCurrentU
   private val _isLoggedIn : MutableStateFlow<Boolean?> = MutableStateFlow(null)
   val isLoggedIn:StateFlow<Boolean?> =_isLoggedIn
 
-
+  init {
+    getCurrentUser()
+  }
   fun getCurrentUser(){
     viewModelScope.launch {
       try {
       val currentUser = getCurrentUserUseCase()
-       if (currentUser.fullName==null){
+       if (currentUser?.fullName==null){
          _isLoggedIn.value = false}
         else {
       _currentUser.value = UserInfoModel(fullName = currentUser.fullName, email = currentUser.email)
@@ -41,7 +43,5 @@ class SplashViewModel @Inject constructor(val getCurrentUserUseCase: GetCurrentU
     }
   }
 
-  init {
-      getCurrentUser()
-  }
+
 }
