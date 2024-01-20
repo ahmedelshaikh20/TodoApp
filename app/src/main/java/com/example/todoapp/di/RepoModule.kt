@@ -1,9 +1,8 @@
 package com.example.todoapp.di
 
 import com.example.data.api.user.UserApiClient
-import com.example.data.repo.UserRepoImpl
+import com.example.data.repo.UserRepositoryImpl
 import com.example.domain.repositories.UserRepo
-import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,9 +15,7 @@ object RepoModule{
 
   @Provides
   fun provideRepo (userApiClient: UserApiClient) : UserRepo{
-    return UserRepoImpl(userApiClient)
+    return UserRepositoryImpl(userApiClient)
   }
-  fun provideUserApiClient (firebaseAuth: FirebaseAuth) : UserApiClient{
-    return UserApiClient(firebaseAuth)
-  }
+
 }

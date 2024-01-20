@@ -1,5 +1,6 @@
 package com.example.todoapp.di
 
+import com.example.data.api.user.UserApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -17,5 +18,8 @@ object FirebaseModule {
     return Firebase.auth
 
   }
-
+  @Provides
+  fun provideUserApiClient (firebaseAuth: FirebaseAuth) : UserApiClient {
+    return UserApiClient(firebaseAuth)
+  }
 }
