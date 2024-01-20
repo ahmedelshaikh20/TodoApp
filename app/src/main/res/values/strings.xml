@@ -16,4 +16,8 @@
   <string name="welcome_message">Lets help you in completing your tasks</string>
   <string name="fullname_placeholder">Ahmed Salah</string>
   <string name="intro_message">Get things done with TODO</string>
+  <string name="title">Title</string>
+  <string name="note_title">Note Title</string>
+  <string name="description">Description</string>
+  <string name="note_description">Note Description</string>
 </resources>
