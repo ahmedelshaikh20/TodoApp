@@ -77,6 +77,9 @@ dependencies {
   implementation("com.google.firebase:firebase-auth")
   implementation("com.google.firebase:firebase-firestore")
   implementation ("androidx.compose.material:material-icons-extended")
+  kapt("com.google.dagger:hilt-compiler:2.49")
+  // Cause we cannot create viewmodel in navigation
+  implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
   implementation(project(path=":domain") )
   implementation(project(path=":data") )

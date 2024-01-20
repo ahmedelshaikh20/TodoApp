@@ -18,6 +18,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.todoapp.R
 import com.example.todoapp.navigation.Screen
@@ -27,7 +29,7 @@ import com.example.todoapp.viewmodel.SplashViewModel
 
 
 @Composable
-fun SplashScreen(navController: NavHostController ,splashViewModel: SplashViewModel) {
+fun SplashScreen(navController: NavHostController ,splashViewModel: SplashViewModel= hiltViewModel()) {
   val currentUser = splashViewModel.currentUser.collectAsState()
   val isLoggedIn =splashViewModel.isLoggedIn.collectAsState()
 
@@ -61,7 +63,7 @@ fun SplashScreen(navController: NavHostController ,splashViewModel: SplashViewMo
         .fillMaxWidth()
         .heightIn(min = 200.dp)
     )
-    BoldTextField(value = stringResource(R.string.intro_message), size = 22 ,modifier = Modifier.padding(20.dp))
+    BoldTextField(value = stringResource(R.string.intro_message), size = 22.sp ,modifier = Modifier.padding(20.dp))
 
 
 

@@ -26,6 +26,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.todoapp.R
 import com.example.todoapp.navigation.Screen
@@ -40,12 +41,12 @@ import com.example.todoapp.viewmodel.SignInViewModel
 
 
 @Composable
-fun SignInScreen(navController: NavHostController, signInViewModel: SignInViewModel) {
+fun SignInScreen(navController: NavHostController, signInViewModel: SignInViewModel= hiltViewModel()) {
   val isUsrSignedIn = signInViewModel.userSuccessfullySignIn.collectAsState()
   val currentUser = signInViewModel.currentUser.collectAsState()
   LaunchedEffect(key1 = isUsrSignedIn.value) {
     if (isUsrSignedIn.value) {
-      navController.navigate(Screen.HomeScreen.withArgs(currentUser.value.fullName.toString())){
+      navController.navigate(Screen.HomeScreen.withArgs(currentUser.value?.fullName.toString())){
         popUpTo(navController.graph.id){
           inclusive=true
         }

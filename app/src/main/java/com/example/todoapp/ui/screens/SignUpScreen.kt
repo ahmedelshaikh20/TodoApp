@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.todoapp.R
 import com.example.todoapp.navigation.Screen
@@ -35,7 +37,7 @@ import com.example.todoapp.viewmodel.SignUpViewModel
 
 
 @Composable
-fun SignUpScreen(navController: NavHostController, signUpViewModel: SignUpViewModel) {
+fun SignUpScreen(navController: NavHostController, signUpViewModel: SignUpViewModel= hiltViewModel()) {
   val registrationInfo = signUpViewModel.userRegistrationInfo.collectAsState()
   val isRegistrationDone = signUpViewModel.isRegistrationDone.collectAsState()
   LaunchedEffect(key1 = isRegistrationDone.value ){
@@ -117,7 +119,7 @@ fun Headline(title: String, par: String, modifier: Modifier = Modifier) {
     modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.spacedBy(5.dp)
   ) {
-    BoldTextField(value = title, size = 22)
+    BoldTextField(value = title, size = 22.sp)
       BasicTextField(value = par)
 
   }
