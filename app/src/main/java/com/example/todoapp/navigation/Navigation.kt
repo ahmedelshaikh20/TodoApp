@@ -17,15 +17,10 @@ import com.example.todoapp.viewmodel.SignUpViewModel
 import com.example.todoapp.viewmodel.SplashViewModel
 
 @Composable
-fun Navigation(
-  signUpViewModel: SignUpViewModel = viewModel(),
-  homeViewModel: HomeViewModel = viewModel(),
-  signInViewModel: SignInViewModel = viewModel(),
-  splashViewModel: SplashViewModel = viewModel()
-) {
+fun Navigation() {
   val navController = rememberNavController()
   NavHost(navController = navController, startDestination = Screen.SplashScreen.route) {
-    composable(Screen.SplashScreen.route) { SplashScreen(navController, splashViewModel) }
+    composable(Screen.SplashScreen.route) { SplashScreen(navController) }
     composable(
       Screen.HomeScreen.route + "/{user_name}", arguments = listOf(navArgument("user_name") {
         type = NavType.StringType
@@ -33,10 +28,10 @@ fun Navigation(
         defaultValue = ""
       })
     ) { entry ->
-      HomeScreen(navController, userName = entry.arguments?.getString("user_name"), homeViewModel)
+      HomeScreen(navController, userName = entry.arguments?.getString("user_name"))
     }
-    composable(Screen.SigninScreen.route) { SignInScreen(navController, signInViewModel) }
-    composable(Screen.SignUpScreen.route) { SignUpScreen(navController, signUpViewModel) }
+    composable(Screen.SigninScreen.route) { SignInScreen(navController) }
+    composable(Screen.SignUpScreen.route) { SignUpScreen(navController) }
 
   }
 }
