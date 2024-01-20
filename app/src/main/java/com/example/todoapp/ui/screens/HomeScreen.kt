@@ -21,8 +21,6 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,16 +34,16 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.todoapp.R
 import com.example.todoapp.staticImage
-import com.example.todoapp.ui.components.BasicButton
-import com.example.todoapp.ui.components.BasicTextField
 import com.example.todoapp.ui.components.BoldTextField
 import com.example.todoapp.ui.components.ButtonComponent
 import com.example.todoapp.ui.components.MyTextField
@@ -53,7 +51,7 @@ import com.example.todoapp.utils.fontsfamilys
 import com.example.todoapp.viewmodel.HomeViewModel
 
 @Composable
-fun HomeScreen(navController: NavHostController, userName: String?, homeViewModel: HomeViewModel) {
+fun HomeScreen(navController: NavHostController, userName: String?, homeViewModel: HomeViewModel = hiltViewModel()) {
 
 
   Column(
@@ -82,7 +80,9 @@ fun HomeScreen(navController: NavHostController, userName: String?, homeViewMode
 fun notesSection() {
 
   Column(
-    modifier = Modifier.padding(bottom = 20.dp, start = 10.dp, end = 10.dp),
+    modifier = Modifier
+      .fillMaxSize()
+      .padding(bottom = 20.dp, start = 10.dp, end = 10.dp),
     verticalArrangement = Arrangement.spacedBy(2.dp)
   ) {
     Row(
@@ -102,7 +102,7 @@ fun notesSection() {
         )
       )
     }
-    notes()
+    NotesList()
 
   }
 
@@ -110,8 +110,8 @@ fun notesSection() {
 }
 
 @Composable
-fun notes() {
-  var visible by remember {
+fun NotesList() {
+  var notesVisible by remember {
     mutableStateOf(false)
   }
   Column(
@@ -122,16 +122,17 @@ fun notes() {
       .background(color = Color.White, shape = RoundedCornerShape(size = 10.dp)),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    AnimatedVisibility( visible) {
+    AnimatedVisibility( notesVisible) {
+      Column (horizontalAlignment = Alignment.CenterHorizontally){
       MyTextField(
-        label = "Title",
-        placeholder = "Note Title",
+        label = stringResource(R.string.title),
+        placeholder = stringResource(R.string.note_title),
         modifier = Modifier.padding(horizontal = 10.dp),
         onValueChanged = {}
       )
       MyTextField(
-        label = "Description",
-        placeholder = "Note Description",
+        label = stringResource(R.string.description),
+        placeholder = stringResource(R.string.note_description),
         modifier = Modifier.padding(horizontal = 10.dp),
         onValueChanged = {}
       )
@@ -140,11 +141,19 @@ fun notes() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
       ) {
-         ButtonComponent(  "Save", modifier = Modifier.padding(10.dp), onClick = {})
+         ButtonComponent(  "Save", modifier = Modifier.padding(10.dp), onClick = {
+           notesVisible=!notesVisible
+         })
 
-      }
+      }}
 
     }
+    AnimatedVisibility(visible = !notesVisible) {
+
+
+    Column {
+
+
       Row(
         modifier = Modifier
           .fillMaxWidth()
@@ -169,7 +178,7 @@ fun notes() {
           modifier = Modifier
             .size(20.dp)
             .clickable {
-              visible = true
+              notesVisible = !notesVisible
             }
         )
       }
@@ -183,7 +192,7 @@ fun notes() {
         }
         }
 
-  }
+  }}}
 }
 
 @Composable
@@ -227,7 +236,7 @@ fun RoundedImage(
       contentScale = ContentScale.Crop
 
     )
-    BoldTextField(value = "Welcome $text!", size = 22)
+    BoldTextField(value = "Welcome $text!", size = 20.sp)
   }
 }
 
