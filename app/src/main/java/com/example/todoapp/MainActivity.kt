@@ -35,17 +35,20 @@ import com.example.todoapp.ui.screens.SignInScreen
 import com.example.todoapp.ui.screens.SignUpScreen
 import com.example.todoapp.ui.screens.SplashScreen
 import com.example.todoapp.ui.theme.TodoAppTheme
+import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class MainActivity : ComponentActivity() {
+@AndroidEntryPoint
+class MainActivity  : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
       TodoAppTheme {
         // A surface container using the 'background' color from the theme
-        Column(
+        Surface(
           modifier = Modifier.fillMaxSize(),
-          verticalArrangement = Arrangement.Center,
-          horizontalAlignment = Alignment.CenterHorizontally
+
         ) {
 
 

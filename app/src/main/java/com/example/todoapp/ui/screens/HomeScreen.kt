@@ -1,5 +1,6 @@
 package com.example.todoapp.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,18 +34,25 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.todoapp.R
 import com.example.todoapp.staticImage
+import com.example.todoapp.ui.components.BoldTextField
+import com.example.todoapp.ui.components.ButtonComponent
+import com.example.todoapp.ui.components.MyTextField
 import com.example.todoapp.utils.fontsfamilys
+import com.example.todoapp.viewmodel.HomeViewModel
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController, userName: String?, homeViewModel: HomeViewModel = hiltViewModel()) {
+
 
   Column(
     modifier = Modifier
@@ -59,20 +67,22 @@ fun HomeScreen(navController: NavHostController) {
         .background(colorResource(id = R.color.mainColor))
     ) {
       staticImage(background = colorResource(id = R.color.mainColor))
-      RoundedImage(painterResource(id = R.drawable.gayar), "Gayar", modifier = Modifier.padding())
+      RoundedImage(painterResource(id = R.drawable.gayar), userName, modifier = Modifier.padding())
     }
-    middleImage(Modifier.size(100.dp))
-    notesSection()
+    MiddleImage(Modifier.size(100.dp))
+    NotesSection()
   }
 
 
 }
 
 @Composable
-fun notesSection() {
+fun NotesSection() {
 
   Column(
-    modifier = Modifier.padding(bottom = 20.dp, start = 10.dp, end = 10.dp),
+    modifier = Modifier
+      .fillMaxSize()
+      .padding(bottom = 20.dp, start = 10.dp, end = 10.dp),
     verticalArrangement = Arrangement.spacedBy(2.dp)
   ) {
     Row(
@@ -92,7 +102,7 @@ fun notesSection() {
         )
       )
     }
-    notes()
+    NotesList()
 
   }
 
@@ -100,8 +110,8 @@ fun notesSection() {
 }
 
 @Composable
-fun notes() {
-  var visible by remember {
+fun NotesList() {
+  var isNotesVisible by remember {
     mutableStateOf(false)
   }
   Column(
@@ -112,27 +122,38 @@ fun notes() {
       .background(color = Color.White, shape = RoundedCornerShape(size = 10.dp)),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    if (visible) {
-      combinedTextField(
-        label = "Title",
-        placeholder = "Note Title",
-        modifier = Modifier.padding(horizontal = 10.dp)
+    AnimatedVisibility( isNotesVisible) {
+      Column (horizontalAlignment = Alignment.CenterHorizontally){
+      MyTextField(
+        label = stringResource(R.string.title),
+        placeholder = stringResource(R.string.note_title),
+        modifier = Modifier.padding(horizontal = 10.dp),
+        onValueChanged = {}
       )
-      combinedTextField(
-        label = "Description",
-        placeholder = "Note Description",
-        modifier = Modifier.padding(horizontal = 10.dp)
+      MyTextField(
+        label = stringResource(R.string.description),
+        placeholder = stringResource(R.string.note_description),
+        modifier = Modifier.padding(horizontal = 10.dp),
+        onValueChanged = {}
       )
 
       Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
       ) {
-        composeButton(textButton = "Save", modifier = Modifier.padding(10.dp), onClick = {})
+         ButtonComponent(  "Save", modifier = Modifier.padding(10.dp), onClick = {
+           isNotesVisible=!isNotesVisible
+         })
 
-      }
+      }}
 
-    } else {
+    }
+    AnimatedVisibility(visible = !isNotesVisible) {
+
+
+    Column {
+
+
       Row(
         modifier = Modifier
           .fillMaxWidth()
@@ -157,7 +178,7 @@ fun notes() {
           modifier = Modifier
             .size(20.dp)
             .clickable {
-              visible = true
+              isNotesVisible = !isNotesVisible
             }
         )
       }
@@ -169,13 +190,13 @@ fun notes() {
           CustomizedCheckBox()
           CustomizedCheckBox()
         }
-      }
-    }
-  }
+        }
+
+  }}}
 }
 
 @Composable
-fun middleImage(modifier: Modifier = Modifier) {
+fun MiddleImage(modifier: Modifier = Modifier) {
   Image(
     modifier = modifier,
     painter = painterResource(id = R.drawable.clock),
@@ -215,17 +236,7 @@ fun RoundedImage(
       contentScale = ContentScale.Crop
 
     )
-    Text(
-      text = "Welcome $text!",
-      style = TextStyle(
-        fontSize = 22.sp,
-        fontFamily = fontsfamilys.poppinsFamily,
-        fontWeight = FontWeight(600),
-        color = Color.White,
-        textAlign = TextAlign.Center,
-
-        ),
-    )
+    BoldTextField(value = "Welcome $text!", size = 20.sp)
   }
 }
 
