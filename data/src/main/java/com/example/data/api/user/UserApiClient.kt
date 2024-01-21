@@ -63,11 +63,11 @@ class UserApiClient @Inject constructor(private val firebaseAuth: FirebaseAuth) 
   }
 
 
-  suspend fun getCurrentUser(): FirebaseUser? {
+  suspend fun getCurrentUser(): UserInfoModel? {
 
     try {
       val user = firebaseAuth.currentUser
-      return user
+      return user?.toUserInfoModel()
     } catch (e: Exception) {
 
       throw Exception(e.message)

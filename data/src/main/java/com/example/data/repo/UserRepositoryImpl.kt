@@ -1,7 +1,6 @@
 package com.example.data.repo
 
 import com.example.data.api.user.UserApiClient
-import com.example.data.api.user.toUserInfoModel
 import com.example.domain.models.RegistrationModel
 import com.example.domain.models.SignInModel
 import com.example.domain.models.UserInfoModel
@@ -17,8 +16,7 @@ class UserRepositoryImpl @Inject constructor(private val userApiClient: UserApiC
 
 
   override suspend fun getCurrentUser(): UserInfoModel? {
-    val firebaseUser = userApiClient.getCurrentUser()
-    return firebaseUser?.toUserInfoModel()
+    return userApiClient.getCurrentUser()
   }
 
   override suspend fun signInUser(signInModel: SignInModel) {
@@ -26,8 +24,6 @@ class UserRepositoryImpl @Inject constructor(private val userApiClient: UserApiC
 
 
   }
-
-
 
 
 }
