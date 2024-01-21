@@ -70,14 +70,14 @@ fun HomeScreen(navController: NavHostController, userName: String?, homeViewMode
       RoundedImage(painterResource(id = R.drawable.gayar), userName, modifier = Modifier.padding())
     }
     MiddleImage(Modifier.size(100.dp))
-    notesSection()
+    NotesSection()
   }
 
 
 }
 
 @Composable
-fun notesSection() {
+fun NotesSection() {
 
   Column(
     modifier = Modifier
@@ -111,7 +111,7 @@ fun notesSection() {
 
 @Composable
 fun NotesList() {
-  var notesVisible by remember {
+  var isNotesVisible by remember {
     mutableStateOf(false)
   }
   Column(
@@ -122,7 +122,7 @@ fun NotesList() {
       .background(color = Color.White, shape = RoundedCornerShape(size = 10.dp)),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    AnimatedVisibility( notesVisible) {
+    AnimatedVisibility( isNotesVisible) {
       Column (horizontalAlignment = Alignment.CenterHorizontally){
       MyTextField(
         label = stringResource(R.string.title),
@@ -142,13 +142,13 @@ fun NotesList() {
         horizontalArrangement = Arrangement.spacedBy(10.dp)
       ) {
          ButtonComponent(  "Save", modifier = Modifier.padding(10.dp), onClick = {
-           notesVisible=!notesVisible
+           isNotesVisible=!isNotesVisible
          })
 
       }}
 
     }
-    AnimatedVisibility(visible = !notesVisible) {
+    AnimatedVisibility(visible = !isNotesVisible) {
 
 
     Column {
@@ -178,7 +178,7 @@ fun NotesList() {
           modifier = Modifier
             .size(20.dp)
             .clickable {
-              notesVisible = !notesVisible
+              isNotesVisible = !isNotesVisible
             }
         )
       }
