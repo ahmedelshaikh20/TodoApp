@@ -1,4 +1,4 @@
-package com.example.todoapp.ui.screens
+package com.example.todoapp.ui.screens.splashscreen
 
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -29,21 +29,22 @@ import com.example.todoapp.viewmodel.SplashViewModel
 
 
 @Composable
-fun SplashScreen(navController: NavHostController ,splashViewModel: SplashViewModel= hiltViewModel()) {
-  val currentUser = splashViewModel.currentUser.collectAsState()
-  val isLoggedIn =splashViewModel.isLoggedIn.collectAsState()
+fun SplashScreen(
+  navController: NavHostController,
+  splashViewModel: SplashViewModel = hiltViewModel()
+) {
+  val state = splashViewModel.splashScreenState
 
-  LaunchedEffect(key1 = isLoggedIn.value ){
-    if (isLoggedIn.value==true){
+  LaunchedEffect(key1 = state.isLogged) {
+    if (state.isLogged) {
       //Do the navigation with user name
-      Log.d("User Name" , currentUser.value.fullName.toString())
-      navController.navigate(Screen.HomeScreen.withArgs(currentUser.value.fullName.toString())){
-        popUpTo(navController.graph.id){
-          inclusive=true
+      Log.d("User Name", state.currentUserName.toString())
+      navController.navigate(Screen.HomeScreen.withArgs(state.currentUserName.toString())) {
+        popUpTo(navController.graph.id) {
+          inclusive = true
         }
       }
-    }else if (isLoggedIn.value == false)
-    {
+    } else {
       navController.navigate(Screen.SignUpScreen.route)
     }
   }
@@ -55,7 +56,7 @@ fun SplashScreen(navController: NavHostController ,splashViewModel: SplashViewMo
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
     staticImage()
-    Spacer(modifier = Modifier.heightIn(min=200.dp))
+    Spacer(modifier = Modifier.heightIn(min = 200.dp))
     Image(
       painter = painterResource(id = R.drawable.splash_background),
       contentDescription = "Background Image",
@@ -63,9 +64,11 @@ fun SplashScreen(navController: NavHostController ,splashViewModel: SplashViewMo
         .fillMaxWidth()
         .heightIn(min = 200.dp)
     )
-    BoldTextField(value = stringResource(R.string.intro_message), size = 22.sp ,modifier = Modifier.padding(20.dp))
-
-
+    BoldTextField(
+      value = stringResource(R.string.intro_message),
+      size = 22.sp,
+      modifier = Modifier.padding(20.dp)
+    )
 
 
   }

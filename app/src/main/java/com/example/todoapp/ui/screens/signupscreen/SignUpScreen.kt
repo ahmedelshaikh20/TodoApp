@@ -1,4 +1,4 @@
-package com.example.todoapp.ui.screens
+package com.example.todoapp.ui.screens.signupscreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -38,11 +38,11 @@ import com.example.todoapp.viewmodel.SignUpViewModel
 
 @Composable
 fun SignUpScreen(navController: NavHostController, signUpViewModel: SignUpViewModel= hiltViewModel()) {
-  val registrationInfo = signUpViewModel.userRegistrationInfo.collectAsState()
-  val isRegistrationDone = signUpViewModel.isRegistrationDone.collectAsState()
-  LaunchedEffect(key1 = isRegistrationDone.value ){
-    if (isRegistrationDone.value){
-      navController.navigate(Screen.HomeScreen.withArgs(registrationInfo.value.fullName)){
+
+  val state = signUpViewModel.signupScreenState
+  LaunchedEffect(key1 = state.isRegistrationDone ){
+    if (state.isRegistrationDone ){
+      navController.navigate(Screen.HomeScreen.withArgs(state.userRegistrationInfo.fullName )){
         popUpTo(navController.graph.id){
           inclusive=true
         }
