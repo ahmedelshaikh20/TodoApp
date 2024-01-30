@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.usecases.GetCurrentUserUseCase
+import com.example.domain.usecases.user.GetCurrentUserUseCase
 import com.example.todoapp.ui.screens.splashscreen.SplashScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -14,11 +14,11 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class SplashViewModel @Inject constructor(val getCurrentUserUseCase: GetCurrentUserUseCase) :
+class SplashViewModel @Inject constructor(val currentUser: GetCurrentUserUseCase) :
   ViewModel() {
 
 
-   var splashScreenState by mutableStateOf(SplashScreenState())
+   var splashScreenState by mutableStateOf(SplashScreenState(isLogged = false , currentUserName = null))
 
   init {
     getCurrentUser()
@@ -27,11 +27,11 @@ class SplashViewModel @Inject constructor(val getCurrentUserUseCase: GetCurrentU
   fun getCurrentUser() {
     viewModelScope.launch {
       try {
-        val currentUser = getCurrentUserUseCase()
-        splashScreenState = if (currentUser?.fullName == null) {
+        val currUser = currentUser()
+        splashScreenState = if (currUser?.fullName == null) {
           splashScreenState.copy(isLogged = false)
         } else {
-          splashScreenState.copy(isLogged = true, currentUserName = currentUser.fullName)
+          splashScreenState.copy(isLogged = true, currentUserName = currUser.fullName)
         }
       } catch (e: Exception) {
         Log.e("Error Fetching Current User", e.message.toString())

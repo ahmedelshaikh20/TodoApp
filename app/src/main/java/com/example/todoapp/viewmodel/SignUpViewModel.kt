@@ -6,32 +6,29 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.models.RegistrationModel
-import com.example.domain.usecases.SignUpUseCase
+import com.example.domain.usecases.user.SignUpUseCase
 import com.example.todoapp.ui.screens.signupscreen.SignUpScreenState
-import com.example.todoapp.utils.SignUpUIEvent
+import com.example.todoapp.ui.screens.signupscreen.SignUpUIEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-  val signUpUseCase: SignUpUseCase,
+  val signUp: SignUpUseCase,
 ) : ViewModel() {
 
 
-  var signupScreenState by mutableStateOf(SignUpScreenState())
+  var state by mutableStateOf(SignUpScreenState())
 
   fun signUp() {
     viewModelScope.launch {
       try {
 
         validateRegistrationInfo()
-        signUpUseCase(signupScreenState.userRegistrationInfo)
-        signupScreenState = signupScreenState.copy(isRegistrationDone = true)
-        Log.e("SignUp Success", signupScreenState.userRegistrationInfo.toString())
+        signUp(state.userRegistrationInfo)
+        state = state.copy(isRegistrationDone = true)
+        Log.e("SignUp Success", state.userRegistrationInfo.toString())
       } catch (e: Exception) {
         Log.e("SignUp Error", e.message.toString())
       }
@@ -40,7 +37,7 @@ class SignUpViewModel @Inject constructor(
   }
 
   private fun validateRegistrationInfo() {
-    val userRegistrationInfo = signupScreenState.userRegistrationInfo
+    val userRegistrationInfo = state.userRegistrationInfo
     if (userRegistrationInfo.email == "" || userRegistrationInfo.fullName == "" || userRegistrationInfo.password == "") {
       throw Exception("Some Fields are missing")
     }
@@ -52,19 +49,19 @@ class SignUpViewModel @Inject constructor(
     when (event) {
 
       is SignUpUIEvent.FullNameChanged -> {
-        signupScreenState.userRegistrationInfo = signupScreenState.userRegistrationInfo.copy(
+        state.userRegistrationInfo = state.userRegistrationInfo.copy(
           fullName = event.fullname
         )
       }
 
       is SignUpUIEvent.EmailChanged -> {
-        signupScreenState.userRegistrationInfo = signupScreenState.userRegistrationInfo.copy(
+        state.userRegistrationInfo = state.userRegistrationInfo.copy(
           email = event.email
         )
       }
 
       is SignUpUIEvent.PasswordChanged -> {
-        signupScreenState.userRegistrationInfo = signupScreenState.userRegistrationInfo.copy(
+        state.userRegistrationInfo = state.userRegistrationInfo.copy(
           password = event.password
         )
 
