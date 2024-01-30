@@ -16,7 +16,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -36,7 +35,6 @@ import com.example.todoapp.ui.components.MyTextField
 import com.example.todoapp.ui.components.PasswordTextField
 import com.example.todoapp.ui.components.TextClickable
 import com.example.todoapp.ui.screens.signupscreen.Headline
-import com.example.todoapp.utils.SignInUIEvent
 import com.example.todoapp.utils.fontsfamilys
 import com.example.todoapp.viewmodel.SignInViewModel
 
@@ -47,7 +45,7 @@ fun SignInScreen(
   signInViewModel: SignInViewModel = hiltViewModel()
 ) {
 
-  val state = signInViewModel.signInScreenState
+  val state = signInViewModel.state
   LaunchedEffect(key1 = state.userSuccessfullyLogged) {
     if (state.userSuccessfullyLogged) {
       navController.navigate(Screen.HomeScreen.withArgs(state.currentUserInfo?.fullName.toString())) {
@@ -101,7 +99,7 @@ fun HeadlineWithImage(modifier: Modifier = Modifier) {
     verticalArrangement = Arrangement.spacedBy(5.dp),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    Headline("Welcome Back", "")
+    Headline(stringResource(R.string.welcome_back), "")
     Image(
       painter = painterResource(id = R.drawable.signin_img),
       contentDescription = "Sign In Image",
