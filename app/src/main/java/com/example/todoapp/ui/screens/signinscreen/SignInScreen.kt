@@ -48,7 +48,7 @@ fun SignInScreen(
   val state = signInViewModel.state
   LaunchedEffect(key1 = state.userSuccessfullyLogged) {
     if (state.userSuccessfullyLogged) {
-      navController.navigate(Screen.HomeScreen.withArgs(state.currentUserInfo?.fullName.toString())) {
+      navController.navigate(Screen.HomeScreen.withArgs(state.currentUserName)) {
         popUpTo(navController.graph.id) {
           inclusive = true
         }

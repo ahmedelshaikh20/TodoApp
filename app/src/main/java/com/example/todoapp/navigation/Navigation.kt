@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.todoapp.ui.screens.HomeScreen
+import com.example.todoapp.ui.screens.homescreen.HomeScreen
 import com.example.todoapp.ui.screens.signinscreen.SignInScreen
 import com.example.todoapp.ui.screens.signupscreen.SignUpScreen
 import com.example.todoapp.ui.screens.splashscreen.SplashScreen

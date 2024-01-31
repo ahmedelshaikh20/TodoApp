@@ -14,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -32,17 +31,16 @@ import com.example.todoapp.ui.components.MyTextField
 import com.example.todoapp.ui.components.BasicTextField
 import com.example.todoapp.ui.components.PasswordTextField
 import com.example.todoapp.ui.components.TextClickable
-import com.example.todoapp.utils.SignUpUIEvent
 import com.example.todoapp.viewmodel.SignUpViewModel
 
 
 @Composable
 fun SignUpScreen(navController: NavHostController, signUpViewModel: SignUpViewModel= hiltViewModel()) {
 
-  val state = signUpViewModel.signupScreenState
+  val state = signUpViewModel.state
   LaunchedEffect(key1 = state.isRegistrationDone ){
     if (state.isRegistrationDone ){
-      navController.navigate(Screen.HomeScreen.withArgs(state.userRegistrationInfo.fullName )){
+      navController.navigate(Screen.HomeScreen.withArgs(state.fullName )){
         popUpTo(navController.graph.id){
           inclusive=true
         }
