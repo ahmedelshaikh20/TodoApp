@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.models.SignInModel
 import com.example.domain.usecases.user.GetCurrentUserUseCase
 import com.example.domain.usecases.user.SignInUseCase
 import com.example.todoapp.ui.screens.signinscreen.SignInScreenState
@@ -22,17 +23,20 @@ class SignInViewModel @Inject constructor(
   ViewModel() {
 
 
-  var state by mutableStateOf(SignInScreenState())
+  var state by mutableStateOf(SignInScreenState("", "", "" , false))
 
 
   fun loginUser() {
     viewModelScope.launch {
       try {
-        signIn(state.userSignInInfo)
+        val userInfo = SignInModel(state.email, state.password)
+        signIn(userInfo)
         val user = getCurrentUser()
-        state = state.copy(
-          currentUserInfo = user
-        )
+        user?.let {
+          state = state.copy(
+            currentUserName = it.fullName
+          )
+        }
         state = state.copy(
           userSuccessfullyLogged = true
         )
@@ -47,13 +51,13 @@ class SignInViewModel @Inject constructor(
 
     when (event) {
       is SignInUIEvent.EmailChanged -> {
-        state.userSignInInfo = state.userSignInInfo.copy(
+        state = state.copy(
           email = event.email
         )
       }
 
       is SignInUIEvent.PasswordChanged -> {
-        state.userSignInInfo = state.userSignInInfo.copy(
+        state = state.copy(
           password = event.password
         )
       }
