@@ -1,7 +1,10 @@
 package com.example.todoapp.di
 
+import com.example.data.api.notes.NotesApiClient
 import com.example.data.api.user.UserApiClient
+import com.example.data.repo.NotesRepositoryImpl
 import com.example.data.repo.UserRepositoryImpl
+import com.example.domain.repositories.NotesRepository
 import com.example.domain.repositories.UserRepo
 import dagger.Module
 import dagger.Provides
@@ -16,6 +19,10 @@ object RepoModule{
   @Provides
   fun provideRepo (userApiClient: UserApiClient) : UserRepo{
     return UserRepositoryImpl(userApiClient)
+  }
+  @Provides
+  fun provideNotesRepo (notesApiClient: NotesApiClient) : NotesRepository{
+    return NotesRepositoryImpl(notesApiClient)
   }
 
 }

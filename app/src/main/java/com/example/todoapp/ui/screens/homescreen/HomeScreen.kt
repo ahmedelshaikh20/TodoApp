@@ -1,4 +1,4 @@
-package com.example.todoapp.ui.screens
+package com.example.todoapp.ui.screens.homescreen
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
@@ -51,7 +51,11 @@ import com.example.todoapp.utils.fontsfamilys
 import com.example.todoapp.viewmodel.HomeViewModel
 
 @Composable
-fun HomeScreen(navController: NavHostController, userName: String?, homeViewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(
+  navController: NavHostController,
+  userName: String?,
+  homeViewModel: HomeViewModel = hiltViewModel()
+) {
 
 
   Column(
@@ -70,14 +74,14 @@ fun HomeScreen(navController: NavHostController, userName: String?, homeViewMode
       RoundedImage(painterResource(id = R.drawable.gayar), userName, modifier = Modifier.padding())
     }
     MiddleImage(Modifier.size(100.dp))
-    NotesSection()
+    NotesSection(homeViewModel)
   }
 
 
 }
 
 @Composable
-fun NotesSection() {
+fun NotesSection(homeViewModel: HomeViewModel) {
 
   Column(
     modifier = Modifier
@@ -102,7 +106,12 @@ fun NotesSection() {
         )
       )
     }
-    NotesList()
+    NotesList(onTitleChanged = {
+      homeViewModel.onEvent(HomeScreenUiEvent.noteTitleChanged(it))
+    }, onSaveClick = {
+      homeViewModel.addNote()
+    }
+    )
 
   }
 
@@ -110,7 +119,10 @@ fun NotesSection() {
 }
 
 @Composable
-fun NotesList() {
+fun NotesList(
+  onTitleChanged: (String) -> Unit,
+  onSaveClick: () -> Unit
+) {
   var isNotesVisible by remember {
     mutableStateOf(false)
   }
@@ -122,77 +134,85 @@ fun NotesList() {
       .background(color = Color.White, shape = RoundedCornerShape(size = 10.dp)),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    AnimatedVisibility( isNotesVisible) {
-      Column (horizontalAlignment = Alignment.CenterHorizontally){
-      MyTextField(
-        label = stringResource(R.string.title),
-        placeholder = stringResource(R.string.note_title),
-        modifier = Modifier.padding(horizontal = 10.dp),
-        onValueChanged = {}
-      )
-      MyTextField(
-        label = stringResource(R.string.description),
-        placeholder = stringResource(R.string.note_description),
-        modifier = Modifier.padding(horizontal = 10.dp),
-        onValueChanged = {}
-      )
+    AnimatedVisibility(isNotesVisible) {
+      Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        MyTextField(
+          label = stringResource(R.string.title),
+          placeholder = stringResource(R.string.note_title),
+          modifier = Modifier.padding(horizontal = 10.dp),
+          onValueChanged = {
+            onTitleChanged(it)
+          }
+        )
+        MyTextField(
+          label = stringResource(R.string.description),
+          placeholder = stringResource(R.string.note_description),
+          modifier = Modifier.padding(horizontal = 10.dp),
+          onValueChanged = {
 
-      Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
-      ) {
-         ButtonComponent(  "Save", modifier = Modifier.padding(10.dp), onClick = {
-           isNotesVisible=!isNotesVisible
-         })
+          }
+        )
 
-      }}
+        Row(
+          verticalAlignment = Alignment.CenterVertically,
+          horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+          ButtonComponent("Save", modifier = Modifier.padding(10.dp), onClick = {
+            onSaveClick()
+            isNotesVisible = !isNotesVisible
+          })
+
+        }
+      }
 
     }
     AnimatedVisibility(visible = !isNotesVisible) {
 
 
-    Column {
+      Column {
 
 
-      Row(
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(top = 10.dp, start = 10.dp, end = 10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-      ) {
-        Text(
-          text = "Daily Tasks",
-          style = TextStyle(
-            fontSize = 17.sp,
-            fontFamily = fontsfamilys.poppinsFamily,
-            fontWeight = FontWeight(700),
-            color = Color(0xCC000000),
-          )
-
-        )
-        Image(
-          painter = painterResource(id = R.drawable.pluscircle),
-          contentDescription = "image description",
-          contentScale = ContentScale.Fit,
+        Row(
           modifier = Modifier
-            .size(20.dp)
-            .clickable {
-              isNotesVisible = !isNotesVisible
-            }
-        )
+            .fillMaxWidth()
+            .padding(top = 10.dp, start = 10.dp, end = 10.dp),
+          verticalAlignment = Alignment.CenterVertically,
+          horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+          Text(
+            text = "Daily Tasks",
+            style = TextStyle(
+              fontSize = 17.sp,
+              fontFamily = fontsfamilys.poppinsFamily,
+              fontWeight = FontWeight(700),
+              color = Color(0xCC000000),
+            )
+
+          )
+          Image(
+            painter = painterResource(id = R.drawable.pluscircle),
+            contentDescription = "image description",
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+              .size(20.dp)
+              .clickable {
+                isNotesVisible = !isNotesVisible
+              }
+          )
+        }
+
+        LazyColumn(
+          modifier = Modifier, verticalArrangement = Arrangement.spacedBy(1.dp),
+        ) {
+          items(5) {
+            CustomizedCheckBox()
+            CustomizedCheckBox()
+          }
+        }
+
       }
-
-      LazyColumn(
-        modifier = Modifier, verticalArrangement = Arrangement.spacedBy(1.dp),
-      ) {
-        items(5) {
-          CustomizedCheckBox()
-          CustomizedCheckBox()
-        }
-        }
-
-  }}}
+    }
+  }
 }
 
 @Composable
