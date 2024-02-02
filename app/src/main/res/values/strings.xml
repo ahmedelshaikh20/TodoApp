@@ -21,4 +21,6 @@
   <string name="description">Description</string>
   <string name="note_description">Note Description</string>
     <string name="welcome_back">Welcome Back</string>
+  <string name="save">Save</string>
+  <string name="daily_tasks">Daily Tasks</string>
 </resources>

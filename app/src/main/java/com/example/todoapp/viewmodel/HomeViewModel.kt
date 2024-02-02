@@ -25,15 +25,12 @@ class HomeViewModel @Inject constructor(
   ViewModel() {
 
 
-  private val _currentUser: MutableStateFlow<UserInfoModel?> =
-    MutableStateFlow(UserInfoModel("", ""))
-  val currentUser = _currentUser
 
-   var state by mutableStateOf(HomeScreenState(""))
+   var state = MutableStateFlow(HomeScreenState(""))
   fun addNote() {
     viewModelScope.launch {
       try {
-        val noteModel = NoteModel(state.note)
+        val noteModel = NoteModel(state.value.note)
         addNote(noteModel)
       } catch (e: Exception) {
         Log.d("Error", e.message.toString())
@@ -45,7 +42,7 @@ class HomeViewModel @Inject constructor(
     when(homeScreenUiEvent){
       is HomeScreenUiEvent.noteTitleChanged ->
       {
-        state = state.copy( note =homeScreenUiEvent.description )
+        state.value = state.value.copy( note =homeScreenUiEvent.description )
       }
     }
   }

@@ -33,13 +33,13 @@ fun SplashScreen(
   navController: NavHostController,
   splashViewModel: SplashViewModel = hiltViewModel()
 ) {
-  val state = splashViewModel.splashScreenState
+  val state = splashViewModel.state.collectAsState()
 
-  LaunchedEffect(key1 = state.isLogged) {
-    if (state.isLogged) {
+  LaunchedEffect(key1 = state.value.isLogged) {
+    if (state.value.isLogged) {
       //Do the navigation with user name
-      Log.d("User Name", state.currentUserName.toString())
-      navController.navigate(Screen.HomeScreen.withArgs(state.currentUserName.toString())) {
+      Log.d("User Name", state.value.currentUserName.toString())
+      navController.navigate(Screen.HomeScreen.withArgs(state.value.currentUserName.toString())) {
         popUpTo(navController.graph.id) {
           inclusive = true
         }

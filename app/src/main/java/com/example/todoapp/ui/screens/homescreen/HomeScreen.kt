@@ -74,14 +74,16 @@ fun HomeScreen(
       RoundedImage(painterResource(id = R.drawable.gayar), userName, modifier = Modifier.padding())
     }
     MiddleImage(Modifier.size(100.dp))
-    NotesSection(homeViewModel)
+    NotesSection(
+      onTitleChanged = { homeViewModel.onEvent(HomeScreenUiEvent.noteTitleChanged(it)) },
+      onSaveClick = { homeViewModel.addNote() })
   }
 
 
 }
 
 @Composable
-fun NotesSection(homeViewModel: HomeViewModel) {
+fun NotesSection(onTitleChanged: (String) -> Unit, onSaveClick: () -> Unit) {
 
   Column(
     modifier = Modifier
@@ -106,11 +108,8 @@ fun NotesSection(homeViewModel: HomeViewModel) {
         )
       )
     }
-    NotesList(onTitleChanged = {
-      homeViewModel.onEvent(HomeScreenUiEvent.noteTitleChanged(it))
-    }, onSaveClick = {
-      homeViewModel.addNote()
-    }
+    NotesList(
+      onTitleChanged = onTitleChanged, onSaveClick = onSaveClick
     )
 
   }
@@ -157,10 +156,13 @@ fun NotesList(
           verticalAlignment = Alignment.CenterVertically,
           horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-          ButtonComponent("Save", modifier = Modifier.padding(10.dp), onClick = {
-            onSaveClick()
-            isNotesVisible = !isNotesVisible
-          })
+          ButtonComponent(
+            stringResource(R.string.save),
+            modifier = Modifier.padding(10.dp),
+            onClick = {
+              onSaveClick()
+              isNotesVisible = !isNotesVisible
+            })
 
         }
       }
@@ -180,7 +182,7 @@ fun NotesList(
           horizontalArrangement = Arrangement.SpaceBetween
         ) {
           Text(
-            text = "Daily Tasks",
+            text = stringResource(R.string.daily_tasks),
             style = TextStyle(
               fontSize = 17.sp,
               fontFamily = fontsfamilys.poppinsFamily,

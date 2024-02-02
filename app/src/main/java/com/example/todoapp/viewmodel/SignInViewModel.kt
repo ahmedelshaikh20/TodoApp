@@ -12,6 +12,7 @@ import com.example.domain.usecases.user.SignInUseCase
 import com.example.todoapp.ui.screens.signinscreen.SignInScreenState
 import com.example.todoapp.ui.screens.signinscreen.SignInUIEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,21 +24,21 @@ class SignInViewModel @Inject constructor(
   ViewModel() {
 
 
-  var state by mutableStateOf(SignInScreenState("", "", "" , false))
+  var state = MutableStateFlow(SignInScreenState("", "", "", false))
 
 
   fun loginUser() {
     viewModelScope.launch {
       try {
-        val userInfo = SignInModel(state.email, state.password)
+        val userInfo = SignInModel(state.value.email, state.value.password)
         signIn(userInfo)
         val user = getCurrentUser()
         user?.let {
-          state = state.copy(
+          state.value = state.value.copy(
             currentUserName = it.fullName
           )
         }
-        state = state.copy(
+        state.value = state.value.copy(
           userSuccessfullyLogged = true
         )
       } catch (e: Exception) {
@@ -51,13 +52,13 @@ class SignInViewModel @Inject constructor(
 
     when (event) {
       is SignInUIEvent.EmailChanged -> {
-        state = state.copy(
+        state.value = state.value.copy(
           email = event.email
         )
       }
 
       is SignInUIEvent.PasswordChanged -> {
-        state = state.copy(
+        state.value = state.value.copy(
           password = event.password
         )
       }

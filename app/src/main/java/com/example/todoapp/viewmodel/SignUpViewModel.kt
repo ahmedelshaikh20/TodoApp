@@ -11,6 +11,7 @@ import com.example.domain.usecases.user.SignUpUseCase
 import com.example.todoapp.ui.screens.signupscreen.SignUpScreenState
 import com.example.todoapp.ui.screens.signupscreen.SignUpUIEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,17 +21,18 @@ class SignUpViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-  var state by mutableStateOf(SignUpScreenState("","" , "" ,false))
+  var state = MutableStateFlow(SignUpScreenState("", "", "", false))
 
   fun signUp() {
     viewModelScope.launch {
       try {
 
         validateRegistrationInfo()
-        val registrationInfo = RegistrationModel(state.fullName , state.email , state.password)
+        val registrationInfo =
+          RegistrationModel(state.value.fullName, state.value.email, state.value.password)
         signUp(registrationInfo)
-        state = state.copy(isRegistrationDone = true)
-        Log.e("SignUp Success", state.isRegistrationDone.toString())
+        state.value = state.value.copy(isRegistrationDone = true)
+        Log.e("SignUp Success", state.value.isRegistrationDone.toString())
       } catch (e: Exception) {
         Log.e("SignUp Error", e.message.toString())
       }
@@ -39,7 +41,7 @@ class SignUpViewModel @Inject constructor(
   }
 
   private fun validateRegistrationInfo() {
-    if (state.email == "" || state.fullName == "" || state.password == "") {
+    if (state.value.email == "" || state.value.fullName == "" || state.value.password == "") {
       throw Exception("Some Fields are missing")
     }
   }
@@ -50,19 +52,19 @@ class SignUpViewModel @Inject constructor(
     when (event) {
 
       is SignUpUIEvent.FullNameChanged -> {
-        state = state.copy(
+        state.value = state.value.copy(
           fullName = event.fullname
         )
       }
 
       is SignUpUIEvent.EmailChanged -> {
-        state = state.copy(
+        state.value = state.value.copy(
           email = event.email
         )
       }
 
       is SignUpUIEvent.PasswordChanged -> {
-        state = state.copy(
+        state.value = state.value.copy(
           password = event.password
         )
 
