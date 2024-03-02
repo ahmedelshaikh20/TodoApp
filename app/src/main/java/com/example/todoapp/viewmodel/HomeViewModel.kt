@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.models.NoteModel
 import com.example.domain.models.UserInfoModel
 import com.example.domain.usecases.notes.AddNoteUseCase
+import com.example.domain.usecases.notes.GetAllNotes
 import com.example.domain.usecases.user.GetCurrentUserUseCase
 import com.example.todoapp.ui.screens.homescreen.HomeScreenState
 import com.example.todoapp.ui.screens.homescreen.HomeScreenUiEvent
@@ -19,18 +20,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-  val getCurrentUser: GetCurrentUserUseCase,
+  val getAllNotesFromRepo: GetAllNotes,
   val addNote: AddNoteUseCase
 ) :
   ViewModel() {
 
 
-
-   var state = MutableStateFlow(HomeScreenState(""))
+  var state by mutableStateOf(HomeScreenState(""))
   fun addNote() {
     viewModelScope.launch {
       try {
-        val noteModel = NoteModel(state.value.note)
+        val noteModel = NoteModel(state.note, "")
         addNote(noteModel)
       } catch (e: Exception) {
         Log.d("Error", e.message.toString())
@@ -38,15 +38,27 @@ class HomeViewModel @Inject constructor(
     }
   }
 
-  fun onEvent(homeScreenUiEvent: HomeScreenUiEvent){
-    when(homeScreenUiEvent){
-      is HomeScreenUiEvent.noteTitleChanged ->
-      {
-        state.value = state.value.copy( note =homeScreenUiEvent.description )
+  fun getAllNotes() {
+    viewModelScope.launch {
+      try {
+        state.notes = getAllNotesFromRepo()
+      } catch (e: Exception) {
+        Log.d("Error", e.message.toString())
       }
     }
   }
 
+  fun onEvent(homeScreenUiEvent: HomeScreenUiEvent) {
+    when (homeScreenUiEvent) {
+      is HomeScreenUiEvent.noteTitleChanged -> {
+        state = state.copy(note = homeScreenUiEvent.description)
+      }
+    }
+  }
+
+  init {
+      getAllNotes()
+  }
 
 //  fun getCurrentUser() {
 //    viewModelScope.launch {

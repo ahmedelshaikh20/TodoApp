@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.domain.models.NoteModel
 import com.example.todoapp.R
 import com.example.todoapp.staticImage
 import com.example.todoapp.ui.components.BoldTextField
@@ -56,7 +58,7 @@ fun HomeScreen(
   userName: String?,
   homeViewModel: HomeViewModel = hiltViewModel()
 ) {
-
+  val state = homeViewModel.state
 
   Column(
     modifier = Modifier
@@ -74,44 +76,45 @@ fun HomeScreen(
       RoundedImage(painterResource(id = R.drawable.gayar), userName, modifier = Modifier.padding())
     }
     MiddleImage(Modifier.size(100.dp))
-    NotesSection(
-      onTitleChanged = { homeViewModel.onEvent(HomeScreenUiEvent.noteTitleChanged(it)) },
-      onSaveClick = { homeViewModel.addNote() })
+    Column(
+      modifier = Modifier
+        .fillMaxSize()
+        .padding(bottom = 20.dp, start = 10.dp, end = 10.dp),
+      verticalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+      NotesSection()
+      NotesList(
+        onTitleChanged = { homeViewModel.onEvent(HomeScreenUiEvent.noteTitleChanged(it)) },
+        onSaveClick = { homeViewModel.addNote() },
+        notes = state.notes
+      )
+
+    }
   }
 
 
 }
 
 @Composable
-fun NotesSection(onTitleChanged: (String) -> Unit, onSaveClick: () -> Unit) {
+fun NotesSection(modifier: Modifier = Modifier) {
 
-  Column(
+
+  Row(
     modifier = Modifier
-      .fillMaxSize()
-      .padding(bottom = 20.dp, start = 10.dp, end = 10.dp),
-    verticalArrangement = Arrangement.spacedBy(2.dp)
+      .fillMaxWidth()
+      .padding(top = 10.dp, start = 10.dp, end = 10.dp),
+    horizontalArrangement = Arrangement.Start
   ) {
-    Row(
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(top = 10.dp, start = 10.dp, end = 10.dp),
-      horizontalArrangement = Arrangement.Start
-    ) {
-      Text(
-        text = "Tasks List",
-        style = TextStyle(
-          fontSize = 20.sp,
-          fontFamily = fontsfamilys.poppinsFamily,
-          fontWeight = FontWeight(700),
-          color = Color(0xCC000000),
-          textAlign = TextAlign.Start
-        )
+    Text(
+      text = "Tasks List",
+      style = TextStyle(
+        fontSize = 20.sp,
+        fontFamily = fontsfamilys.poppinsFamily,
+        fontWeight = FontWeight(700),
+        color = Color(0xCC000000),
+        textAlign = TextAlign.Start
       )
-    }
-    NotesList(
-      onTitleChanged = onTitleChanged, onSaveClick = onSaveClick
     )
-
   }
 
 
@@ -120,7 +123,8 @@ fun NotesSection(onTitleChanged: (String) -> Unit, onSaveClick: () -> Unit) {
 @Composable
 fun NotesList(
   onTitleChanged: (String) -> Unit,
-  onSaveClick: () -> Unit
+  onSaveClick: () -> Unit,
+  notes: List<NoteModel>
 ) {
   var isNotesVisible by remember {
     mutableStateOf(false)
@@ -206,9 +210,8 @@ fun NotesList(
         LazyColumn(
           modifier = Modifier, verticalArrangement = Arrangement.spacedBy(1.dp),
         ) {
-          items(5) {
-            CustomizedCheckBox()
-            CustomizedCheckBox()
+          items(notes) {
+            CustomizedCheckBox(it.title)
           }
         }
 
@@ -264,7 +267,7 @@ fun RoundedImage(
 
 
 @Composable
-fun CustomizedCheckBox(modifier: Modifier = Modifier) {
+fun CustomizedCheckBox(text: String, modifier: Modifier = Modifier) {
   var checkedState by remember { mutableStateOf(false) }
   Row(
     Modifier
@@ -284,7 +287,7 @@ fun CustomizedCheckBox(modifier: Modifier = Modifier) {
       colors = CheckboxDefaults.colors(checkedColor = colorResource(id = R.color.mainColor))
     )
     Text(
-      text = "Select Option",
+      text = text,
       style = TextStyle(
         fontSize = 15.sp,
         fontFamily = fontsfamilys.poppinsFamily,

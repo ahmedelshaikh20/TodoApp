@@ -1,6 +1,8 @@
 package com.example.domain.models
 
 data class NoteModel (
-  val note: String
+  val title: String ,
+  val description : String,
+  val id : Int?=null
 )
 
