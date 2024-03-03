@@ -1,45 +1,46 @@
 package com.example.todoapp.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.models.SignInModel
-import com.example.domain.models.UserInfoModel
-import com.example.domain.usecases.GetCurrentUserUseCase
-import com.example.domain.usecases.SignInUseCase
-import com.example.todoapp.utils.SignInUIEvent
+import com.example.domain.usecases.user.GetCurrentUserUseCase
+import com.example.domain.usecases.user.SignInUseCase
+import com.example.todoapp.ui.screens.signinscreen.SignInScreenState
+import com.example.todoapp.ui.screens.signinscreen.SignInUIEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignInViewModel @Inject constructor(val signInUseCase: SignInUseCase ,
-  val getCurrentUserUseCase: GetCurrentUserUseCase) :
+class SignInViewModel @Inject constructor(
+  val signIn: SignInUseCase,
+  val getCurrentUser: GetCurrentUserUseCase
+) :
   ViewModel() {
 
-  private val _userSignInInfo: MutableStateFlow<SignInModel> = MutableStateFlow(
-    SignInModel("", "")
-  )
-  var userSignInInfo = _userSignInInfo
 
-  private val _userSuccessfullySignIn :MutableStateFlow<Boolean> = MutableStateFlow(false)
-  val userSuccessfullySignIn =_userSuccessfullySignIn
+  var state = MutableStateFlow(SignInScreenState("", "", "", false))
 
-  private val _currentUser: MutableStateFlow<UserInfoModel?> =
-    MutableStateFlow(UserInfoModel("", ""))
-  val currentUser : StateFlow<UserInfoModel?> = _currentUser
 
   fun loginUser() {
     viewModelScope.launch {
       try {
-        signInUseCase(userSignInInfo.value)
-        val user = getCurrentUserUseCase()
-        _currentUser.value = user
-        Log.e("SignInError", currentUser.value?.fullName.toString())
-
-        _userSuccessfullySignIn.value = true
+        val userInfo = SignInModel(state.value.email, state.value.password)
+        signIn(userInfo)
+        val user = getCurrentUser()
+        user?.let {
+          state.value = state.value.copy(
+            currentUserName = it.fullName
+          )
+        }
+        state.value = state.value.copy(
+          userSuccessfullyLogged = true
+        )
       } catch (e: Exception) {
         Log.e("SignInError", e.message.toString())
       }
@@ -47,18 +48,18 @@ class SignInViewModel @Inject constructor(val signInUseCase: SignInUseCase ,
   }
 
 
-  fun signinEventTriggered(signInUIEvent: SignInUIEvent) {
+  fun signinEventTriggered(event: SignInUIEvent) {
 
-    when (signInUIEvent) {
+    when (event) {
       is SignInUIEvent.EmailChanged -> {
-        _userSignInInfo.value = _userSignInInfo.value.copy(
-          email = signInUIEvent.email
+        state.value = state.value.copy(
+          email = event.email
         )
       }
 
       is SignInUIEvent.PasswordChanged -> {
-        _userSignInInfo.value = _userSignInInfo.value.copy(
-          password = signInUIEvent.password
+        state.value = state.value.copy(
+          password = event.password
         )
       }
     }

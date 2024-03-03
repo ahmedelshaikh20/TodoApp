@@ -1,4 +1,4 @@
-package com.example.todoapp.utils
+package com.example.todoapp.ui.screens.signinscreen
 
 sealed class SignInUIEvent {
   data class EmailChanged(val email: String) : SignInUIEvent()

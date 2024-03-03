@@ -1,4 +1,4 @@
-package com.example.todoapp.ui.screens
+package com.example.todoapp.ui.screens.homescreen
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.domain.models.NoteModel
 import com.example.todoapp.R
 import com.example.todoapp.staticImage
 import com.example.todoapp.ui.components.BoldTextField
@@ -51,8 +53,12 @@ import com.example.todoapp.utils.fontsfamilys
 import com.example.todoapp.viewmodel.HomeViewModel
 
 @Composable
-fun HomeScreen(navController: NavHostController, userName: String?, homeViewModel: HomeViewModel = hiltViewModel()) {
-
+fun HomeScreen(
+  navController: NavHostController,
+  userName: String?,
+  homeViewModel: HomeViewModel = hiltViewModel()
+) {
+  val state = homeViewModel.state
 
   Column(
     modifier = Modifier
@@ -70,47 +76,56 @@ fun HomeScreen(navController: NavHostController, userName: String?, homeViewMode
       RoundedImage(painterResource(id = R.drawable.gayar), userName, modifier = Modifier.padding())
     }
     MiddleImage(Modifier.size(100.dp))
-    NotesSection()
-  }
-
-
-}
-
-@Composable
-fun NotesSection() {
-
-  Column(
-    modifier = Modifier
-      .fillMaxSize()
-      .padding(bottom = 20.dp, start = 10.dp, end = 10.dp),
-    verticalArrangement = Arrangement.spacedBy(2.dp)
-  ) {
-    Row(
+    Column(
       modifier = Modifier
-        .fillMaxWidth()
-        .padding(top = 10.dp, start = 10.dp, end = 10.dp),
-      horizontalArrangement = Arrangement.Start
+        .fillMaxSize()
+        .padding(bottom = 20.dp, start = 10.dp, end = 10.dp),
+      verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
-      Text(
-        text = "Tasks List",
-        style = TextStyle(
-          fontSize = 20.sp,
-          fontFamily = fontsfamilys.poppinsFamily,
-          fontWeight = FontWeight(700),
-          color = Color(0xCC000000),
-          textAlign = TextAlign.Start
-        )
+      NotesSection()
+      NotesList(
+        onTitleChanged = { homeViewModel.onEvent(HomeScreenUiEvent.noteTitleChanged(it)) },
+        onSaveClick = { homeViewModel.addNote() },
+        notes = state.notes
       )
-    }
-    NotesList()
 
+    }
   }
 
 
 }
 
 @Composable
-fun NotesList() {
+fun NotesSection(modifier: Modifier = Modifier) {
+
+
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(top = 10.dp, start = 10.dp, end = 10.dp),
+    horizontalArrangement = Arrangement.Start
+  ) {
+    Text(
+      text = "Tasks List",
+      style = TextStyle(
+        fontSize = 20.sp,
+        fontFamily = fontsfamilys.poppinsFamily,
+        fontWeight = FontWeight(700),
+        color = Color(0xCC000000),
+        textAlign = TextAlign.Start
+      )
+    )
+  }
+
+
+}
+
+@Composable
+fun NotesList(
+  onTitleChanged: (String) -> Unit,
+  onSaveClick: () -> Unit,
+  notes: List<NoteModel>
+) {
   var isNotesVisible by remember {
     mutableStateOf(false)
   }
@@ -122,77 +137,87 @@ fun NotesList() {
       .background(color = Color.White, shape = RoundedCornerShape(size = 10.dp)),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    AnimatedVisibility( isNotesVisible) {
-      Column (horizontalAlignment = Alignment.CenterHorizontally){
-      MyTextField(
-        label = stringResource(R.string.title),
-        placeholder = stringResource(R.string.note_title),
-        modifier = Modifier.padding(horizontal = 10.dp),
-        onValueChanged = {}
-      )
-      MyTextField(
-        label = stringResource(R.string.description),
-        placeholder = stringResource(R.string.note_description),
-        modifier = Modifier.padding(horizontal = 10.dp),
-        onValueChanged = {}
-      )
+    AnimatedVisibility(isNotesVisible) {
+      Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        MyTextField(
+          label = stringResource(R.string.title),
+          placeholder = stringResource(R.string.note_title),
+          modifier = Modifier.padding(horizontal = 10.dp),
+          onValueChanged = {
+            onTitleChanged(it)
+          }
+        )
+        MyTextField(
+          label = stringResource(R.string.description),
+          placeholder = stringResource(R.string.note_description),
+          modifier = Modifier.padding(horizontal = 10.dp),
+          onValueChanged = {
 
-      Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
-      ) {
-         ButtonComponent(  "Save", modifier = Modifier.padding(10.dp), onClick = {
-           isNotesVisible=!isNotesVisible
-         })
+          }
+        )
 
-      }}
+        Row(
+          verticalAlignment = Alignment.CenterVertically,
+          horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+          ButtonComponent(
+            stringResource(R.string.save),
+            modifier = Modifier.padding(10.dp),
+            onClick = {
+              onSaveClick()
+              isNotesVisible = !isNotesVisible
+            })
+
+        }
+      }
 
     }
     AnimatedVisibility(visible = !isNotesVisible) {
 
 
-    Column {
+      Column {
 
 
-      Row(
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(top = 10.dp, start = 10.dp, end = 10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-      ) {
-        Text(
-          text = "Daily Tasks",
-          style = TextStyle(
-            fontSize = 17.sp,
-            fontFamily = fontsfamilys.poppinsFamily,
-            fontWeight = FontWeight(700),
-            color = Color(0xCC000000),
-          )
-
-        )
-        Image(
-          painter = painterResource(id = R.drawable.pluscircle),
-          contentDescription = "image description",
-          contentScale = ContentScale.Fit,
+        Row(
           modifier = Modifier
-            .size(20.dp)
-            .clickable {
-              isNotesVisible = !isNotesVisible
-            }
-        )
+            .fillMaxWidth()
+            .padding(top = 10.dp, start = 10.dp, end = 10.dp),
+          verticalAlignment = Alignment.CenterVertically,
+          horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+          Text(
+            text = stringResource(R.string.daily_tasks),
+            style = TextStyle(
+              fontSize = 17.sp,
+              fontFamily = fontsfamilys.poppinsFamily,
+              fontWeight = FontWeight(700),
+              color = Color(0xCC000000),
+            )
+
+          )
+          Image(
+            painter = painterResource(id = R.drawable.pluscircle),
+            contentDescription = "image description",
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+              .size(20.dp)
+              .clickable {
+                isNotesVisible = !isNotesVisible
+              }
+          )
+        }
+
+        LazyColumn(
+          modifier = Modifier, verticalArrangement = Arrangement.spacedBy(1.dp),
+        ) {
+          items(notes) {
+            CustomizedCheckBox(it.title)
+          }
+        }
+
       }
-
-      LazyColumn(
-        modifier = Modifier, verticalArrangement = Arrangement.spacedBy(1.dp),
-      ) {
-        items(5) {
-          CustomizedCheckBox()
-          CustomizedCheckBox()
-        }
-        }
-
-  }}}
+    }
+  }
 }
 
 @Composable
@@ -242,7 +267,7 @@ fun RoundedImage(
 
 
 @Composable
-fun CustomizedCheckBox(modifier: Modifier = Modifier) {
+fun CustomizedCheckBox(text: String, modifier: Modifier = Modifier) {
   var checkedState by remember { mutableStateOf(false) }
   Row(
     Modifier
@@ -262,7 +287,7 @@ fun CustomizedCheckBox(modifier: Modifier = Modifier) {
       colors = CheckboxDefaults.colors(checkedColor = colorResource(id = R.color.mainColor))
     )
     Text(
-      text = "Select Option",
+      text = text,
       style = TextStyle(
         fontSize = 15.sp,
         fontFamily = fontsfamilys.poppinsFamily,

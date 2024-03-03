@@ -1,4 +1,4 @@
-package com.example.todoapp.ui.screens
+package com.example.todoapp.ui.screens.signinscreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,20 +35,23 @@ import com.example.todoapp.ui.components.ButtonComponent
 import com.example.todoapp.ui.components.MyTextField
 import com.example.todoapp.ui.components.PasswordTextField
 import com.example.todoapp.ui.components.TextClickable
-import com.example.todoapp.utils.SignInUIEvent
+import com.example.todoapp.ui.screens.signupscreen.Headline
 import com.example.todoapp.utils.fontsfamilys
 import com.example.todoapp.viewmodel.SignInViewModel
 
 
 @Composable
-fun SignInScreen(navController: NavHostController, signInViewModel: SignInViewModel= hiltViewModel()) {
-  val isUsrSignedIn = signInViewModel.userSuccessfullySignIn.collectAsState()
-  val currentUser = signInViewModel.currentUser.collectAsState()
-  LaunchedEffect(key1 = isUsrSignedIn.value) {
-    if (isUsrSignedIn.value) {
-      navController.navigate(Screen.HomeScreen.withArgs(currentUser.value?.fullName.toString())){
-        popUpTo(navController.graph.id){
-          inclusive=true
+fun SignInScreen(
+  navController: NavHostController,
+  signInViewModel: SignInViewModel = hiltViewModel()
+) {
+
+  val state = signInViewModel.state.collectAsState()
+  LaunchedEffect(key1 = state.value.userSuccessfullyLogged) {
+    if (state.value.userSuccessfullyLogged) {
+      navController.navigate(Screen.HomeScreen.withArgs(state.value.currentUserName.toString())) {
+        popUpTo(navController.graph.id) {
+          inclusive = true
         }
       }
 
@@ -97,7 +100,7 @@ fun HeadlineWithImage(modifier: Modifier = Modifier) {
     verticalArrangement = Arrangement.spacedBy(5.dp),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    Headline("Welcome Back" ,"")
+    Headline(stringResource(R.string.welcome_back), "")
     Image(
       painter = painterResource(id = R.drawable.signin_img),
       contentDescription = "Sign In Image",
@@ -113,14 +116,20 @@ fun SigninSection(
   onEmailChange: (String) -> (Unit)
 ) {
   Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
-    MyTextField(label = stringResource(R.string.email), placeholder = stringResource(R.string.email_placeholder), onValueChanged = {
-      onEmailChange(it)
-    })
-    Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-      PasswordTextField(label = stringResource(R.string.password), placeholder = stringResource(R.string.password_placeholder), onValueChanged = {
-        onPasswordChange(it)
-
+    MyTextField(
+      label = stringResource(R.string.email),
+      placeholder = stringResource(R.string.email_placeholder),
+      onValueChanged = {
+        onEmailChange(it)
       })
+    Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+      PasswordTextField(
+        label = stringResource(R.string.password),
+        placeholder = stringResource(R.string.password_placeholder),
+        onValueChanged = {
+          onPasswordChange(it)
+
+        })
       Box(modifier = Modifier.fillMaxWidth()) {
         Text(
           text = stringResource(R.string.forgot_password),

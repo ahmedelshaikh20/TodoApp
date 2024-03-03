@@ -1,4 +1,4 @@
-package com.example.domain.usecases
+package com.example.domain.usecases.user
 
 import com.example.domain.models.SignInModel
 import com.example.domain.models.UserInfoModel
